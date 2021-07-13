@@ -1,4 +1,4 @@
-package com.flight.app;
+package com.flight.app.Main;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
