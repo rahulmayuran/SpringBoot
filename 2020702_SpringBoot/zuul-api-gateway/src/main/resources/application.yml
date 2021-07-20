@@ -1,0 +1,20 @@
+server:
+   port: 8989
+
+spring:
+   application:
+      name: zuul
+      
+eureka:
+   client:
+      serviceUrl:
+         defaultZone: http://localhost:9999/eureka/
+
+zuul:  
+   routes:
+      BOOK-MY-SHOW-SERVICE:
+         path: /shows/**
+         url: BOOK-MY-SHOW-SERVICE
+      # MOVIES-SERVICE:
+      #    path: /movies/**
+      #    url: MOVIES-SERVICE
