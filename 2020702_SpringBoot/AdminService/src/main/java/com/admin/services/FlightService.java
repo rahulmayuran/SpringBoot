@@ -37,6 +37,11 @@ public class FlightService {
 	public Flight saveFlight(Flight flight){
 		return flightRepository.save(flight);
 	}
+	
+	public String deleteFlight(int id) {
+		flightRepository.deleteById(id);
+		return "Flight Deleted";
+	}
 
 	//Customized in FlightRepository to filter with names
 //    public List<Flight> findFlightsByName(String fname) {

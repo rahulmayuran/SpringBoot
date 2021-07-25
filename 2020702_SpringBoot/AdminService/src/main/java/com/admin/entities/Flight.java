@@ -4,7 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -21,6 +24,12 @@ public class Flight {
 	private int price;
 	private String journey;
 	private String destination;
+	
+	@ManyToOne
+	@JoinColumn(name = "airlineId" , referencedColumnName = "airlineId")
+	@JsonIgnoreProperties("flight")
+	private Airline airline;
+
 
 	public Flight() {}
 
@@ -71,6 +80,15 @@ public class Flight {
 		this.destination = destination;
 	}
 
+
+	public Airline getAirline() {
+		return airline;
+	}
+
+	public void setAirline(Airline airline) {
+		this.airline = airline;
+	}
+	
 	@Override
 	public String toString() {
 		return "Flight [flightId=" + flightId + ", noOfSeats=" + noOfSeats + ", price=" + price + ", journey=" + journey

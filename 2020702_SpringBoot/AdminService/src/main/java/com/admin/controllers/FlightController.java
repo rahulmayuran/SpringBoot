@@ -19,7 +19,7 @@ import com.admin.services.FlightService;
 
 @RestController
 @RequestMapping("/api/v1.0/admin")
-@CrossOrigin(origins = "http://localhost:4200/*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class FlightController {
 
 	@Autowired
@@ -27,8 +27,9 @@ public class FlightController {
 	
 	//Cacheable can be used if there are multiple hits to the 
 		//DB as its inevitable and you have to improve speed of hitting req.
+	//Don't use it in CRUD operations
+	 //@Cacheable(value="flights")
 	@GetMapping("/flight/search")
-    @Cacheable(value="flights")
 	public List<Flight> AllFlights(){
 		System.out.println("finding all flights from db");
 		return flightservice.findAllFlights();
@@ -60,7 +61,18 @@ public class FlightController {
 //		return flightservice.getBookingHistory(emailId);
 //	}
 	
-
+	@DeleteMapping("/flight/delete/{id}")
+	public String deleteFlightById(@PathVariable int id){
+		try {
+			System.out.println("Deleting Flight.." + id);
+			flightservice.deleteFlight(id);
+			return "Deleted Flight(Spring Boot) with id "+ id;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return "Some Error Occured while deleting";
+		}
+	}
+	
 	//User Cancelling Ticket
 	@DeleteMapping("/booking/cancel/{pnr}")
 	@CacheEvict(key ="#id", value="flights")

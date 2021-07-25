@@ -1,9 +1,13 @@
 package com.admin.entities;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Airline {
@@ -16,7 +20,20 @@ public class Airline {
 	private String airlineLogo;
 	private long contactNumber;
 	
+	@OneToMany(mappedBy = "airline")
+	@JsonIgnoreProperties("airline")
+	private Set<Flight> flights ;
 	
+	public Set<Flight> getFlights() {
+		return flights;
+	}
+
+
+	public void setFlights(Set<Flight> flights) {
+		this.flights = flights;
+	}
+
+
 	public Airline(int airlineId, String airlineName, String airlineModel, String airlineLogo,long contactNumber) {
 		this.airlineName = airlineName;
 		this.airlineId = airlineId;

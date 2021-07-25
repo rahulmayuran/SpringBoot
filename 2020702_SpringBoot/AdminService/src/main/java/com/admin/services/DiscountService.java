@@ -22,8 +22,8 @@ public class DiscountService {
 		return discountRepository.findAll();
 	}
 	
-	public String deleteDiscount(String name) {
-		discountRepository.deleteDiscountBydiscountName(name);
+	public String deleteDiscount(int id) {
+		discountRepository.deleteById(id);
 		return "Flight Deleted";
 	}
 }
