@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,25 +35,16 @@ public class Flight {
 	@OneToMany(mappedBy = "flight")
 	private Set<Passenger> passenger = new HashSet<Passenger>();
 
-	public Flight() {}
+	@ManyToOne
+	@JoinColumn(name = "airId" )
+	private Airline airline;
 	
-	public Flight(int flightId, String flightName, String flightModel,
-			double price, String journey, String destination,Discount discount,Set<Passenger> passenger) {
-		super();
-		this.flightId = flightId;
-		this.flightName = flightName;
-		this.flightModel = flightModel;
-		this.price = price;
-		this.journey = journey;
-		this.destination = destination;
-		this.discount = discount;
-		this.passenger = passenger;
-	}
+	public Flight() {}
+
 
 	public int getFlightId() {
 		return flightId;
 	}
-
 	public void setFlightId(int flightId) {
 		this.flightId = flightId;
 	}
@@ -88,6 +81,7 @@ public class Flight {
 		this.journey = journey;
 	}
 
+
 	public String getDestination() {
 		return destination;
 	}
@@ -99,7 +93,7 @@ public class Flight {
 	public Discount getDiscount() {
 		return discount;
 	}
-
+	
 	public void setDiscount(Discount discount) {
 		this.discount = discount;
 	}
@@ -112,11 +106,22 @@ public class Flight {
 		this.passenger = passenger;
 	}
 
+	public Airline getAirline() {
+		return airline;
+	}
+
+	public void setAirline(Airline airline) {
+		this.airline = airline;
+	}
+
 	@Override
 	public String toString() {
 		return "Flight [flightId=" + flightId + ", flightName=" + flightName + ", flightModel=" + flightModel
-				+ ", price=" + price + ", from=" + journey + ", to=" + destination + ", discount=" + discount + "]";
+				+ ", price=" + price + ", journey=" + journey + ", destination=" + destination + ", discount="
+				+ discount + ", passenger=" + passenger + ", airline=" + airline + "]";
 	}
+	
+	
 	
 	
 }
