@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.user.Exception.FlightException;
+import com.user.Exception.UserException;
 import com.user.entities.User;
 import com.user.repositories.UserRepository;
 import com.user.services.UserService;
@@ -61,7 +61,7 @@ public class UserRepositoryTests {
 			.thenThrow(new NullPointerException("I tested an exception."));
 
 		Assertions.assertThrows(
-				FlightException.class, ()->{
+				UserException.class, ()->{
 					userService.dummyExceptionRaised();
 		});
 

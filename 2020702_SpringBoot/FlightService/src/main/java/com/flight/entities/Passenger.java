@@ -6,83 +6,90 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
+@JsonInclude(value = Include.NON_DEFAULT)
 public class Passenger {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int passengerId;
 	
 	private String passengerName;
-	private String preference;
+	private String passengerPreferences;
+	private int passengerAge;
 	private String passengerEmail;
-	private long mobileNumber;
+	private long passengerContact;
 	
 	@ManyToOne
-	@JoinColumn(name = "flightId" )
-	private Flight flight;
+	@JoinColumn(name = "ticketId" , referencedColumnName = "ticketId")
+	@JsonIgnoreProperties("passenger")
+	private Booking booking;
 	
-	public Passenger() {}
-	
-	public Passenger(int passengerId, String passengerName, String preference, String passengerEmail,
-			long mobileNumber) {
-		super();
-		this.passengerId = passengerId;
-		this.passengerName = passengerName;
-		this.preference = preference;
-		this.passengerEmail = passengerEmail;
-		this.mobileNumber = mobileNumber;
+
+
+	public Passenger()
+	{
+			
 	}
-
-
-
+	
 	public int getPassengerId() {
 		return passengerId;
 	}
+
 	public void setPassengerId(int passengerId) {
 		this.passengerId = passengerId;
 	}
+
 	public String getPassengerName() {
 		return passengerName;
 	}
+
 	public void setPassengerName(String passengerName) {
 		this.passengerName = passengerName;
 	}
-	public String getPreference() {
-		return preference;
+
+	public String getPassengerPreferences() {
+		return passengerPreferences;
 	}
-	public void setPreference(String preference) {
-		this.preference = preference;
+
+	public void setPassengerPreferences(String passengerPreferences) {
+		this.passengerPreferences = passengerPreferences;
 	}
+
+	public int getPassengerAge() {
+		return passengerAge;
+	}
+
+	public void setPassengerAge(int passengerAge) {
+		this.passengerAge = passengerAge;
+	}
+
 	public String getPassengerEmail() {
 		return passengerEmail;
 	}
+
 	public void setPassengerEmail(String passengerEmail) {
 		this.passengerEmail = passengerEmail;
 	}
-	public long getMobileNumber() {
-		return mobileNumber;
-	}
-	public void setMobileNumber(long mobileNumber) {
-		this.mobileNumber = mobileNumber;
+
+	public long getPassengerContact() {
+		return passengerContact;
 	}
 
-
-	public Flight getFlight() {
-		return flight;
-	}
-
-	public void setFlight(Flight flight) {
-		this.flight = flight;
-	}
-
-	@Override
-	public String toString() {
-		return "Passenger [passengerId=" + passengerId + ", passengerName=" + passengerName + ", preference="
-				+ preference + ", passengerEmail=" + passengerEmail + ", mobileNumber=" + mobileNumber + "]";
+	public void setPassengerContact(long passengerContact) {
+		this.passengerContact = passengerContact;
 	}
 	
-	
+	public Booking getBooking() {
+		return booking;
+	}
+
+	public void setBooking(Booking booking) {
+		this.booking = booking;
+	}
 	
 }

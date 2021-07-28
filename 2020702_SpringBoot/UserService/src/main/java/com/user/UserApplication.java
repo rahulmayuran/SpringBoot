@@ -21,10 +21,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan(basePackages = { "com.user"})
 @EnableCaching
 @EnableSwagger2
-public class Application implements CommandLineRunner{
+public class UserApplication implements CommandLineRunner{
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(UserApplication.class, args);
 	}
 	
 	@Bean

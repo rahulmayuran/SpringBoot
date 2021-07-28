@@ -42,6 +42,12 @@ public class FlightService {
 		flightRepository.deleteById(id);
 		return "Flight Deleted";
 	}
+	
+	public List<Flight> getFilteredFlights(String j,String d){
+		return flightRepository.getFlightsByJourneyAndDestination(j, d);
+	}
+
+
 
 	//Customized in FlightRepository to filter with names
 //    public List<Flight> findFlightsByName(String fname) {

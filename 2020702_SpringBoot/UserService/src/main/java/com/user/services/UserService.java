@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.user.Exception.FlightException;
+import com.user.Exception.UserException;
 import com.user.entities.User;
 import com.user.repositories.UserRepository;
 
@@ -27,13 +26,13 @@ public class UserService {
 		return userRepository.getUserByUsername(name);
 	}
 	
-	   public void dummyExceptionRaised() throws FlightException {
+	   public void dummyExceptionRaised() throws UserException {
 	        try{
 	            System.out.println("in service method");
 	                userRepository.count(); // sqlException
 	            } catch(NullPointerException e){
 	                System.out.println("in service method, catch block");
-	                throw new FlightException(e);
+	                throw new UserException(e);
 	            }
 
 

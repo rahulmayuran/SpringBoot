@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class UserAndFlightExceptionHandler {
+public class UserExceptionHandler {
 
 	//500
     @ExceptionHandler(value = Exception.class)

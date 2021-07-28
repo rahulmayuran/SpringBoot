@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.admin.entities.Airline;
 import com.admin.services.AirlineService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/api/v1.0/admin")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -25,6 +27,9 @@ public class AirlineController {
 	AirlineService airlineService;
 	
 	@GetMapping("/airline")
+	@ApiOperation(value = "Get all Airlines",
+    	notes = "Already added as an admin",
+    	response = List.class)
 	public List<Airline> allAirlines() {
 		List<Airline> airlines = airlineService.getAllAirlines();
 		System.out.println("Get all airlines "+ Arrays.asList(airlines));

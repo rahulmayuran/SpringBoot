@@ -21,4 +21,10 @@ public class PassengerService {
 	public Passenger savePassenger(Passenger passenger) {
 		return passengerRepository.save(passenger);
 	}
+	
+	public String deletePassenger(int id) {
+		passengerRepository.deleteById(id);
+		return "Deleted the passenger with id "+id;
+		
+	}
 }

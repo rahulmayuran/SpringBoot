@@ -11,7 +11,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
-public class FlightSwaggerConfig {
+public class UserSwaggerConfig {
 
 	 @Bean
 	public Docket mySwaggerConfiguration () {
@@ -26,7 +26,7 @@ public class FlightSwaggerConfig {
 	 
 	  private ApiInfo metadata() {
         return new ApiInfoBuilder()
-            .title( "Flight Swagger" )
+            .title( "User Swagger" )
             .description( "All the requests that the server will respond to." )
             .version( "1.0.0" )
             .build();

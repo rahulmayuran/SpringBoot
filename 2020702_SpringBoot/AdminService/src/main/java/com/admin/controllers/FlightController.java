@@ -47,6 +47,9 @@ public class FlightController {
 	public Flight persistFlight(@RequestBody Flight flight){
 		return flightservice.saveFlight(flight);
 	}
+	
+	
+	
 //	
 //	//Locked flight for booking, a response to be sent from Postman or from Angular.
 //	@PostMapping("/booking/{flightid}")
@@ -71,6 +74,19 @@ public class FlightController {
 			// TODO Auto-generated catch block
 			return "Some Error Occured while deleting";
 		}
+	}
+	
+	@GetMapping("/flight/search/{journey}/{destination}")
+	public List<Flight> filterFlightsBasedOnJourneyAndDestination(@PathVariable String journey, @PathVariable String destination)
+	{
+		try {
+			return flightservice.getFilteredFlights(journey, destination);
+		} catch (Exception e)
+		{
+			System.out.println(e);
+		}
+		return null;
+		 
 	}
 	
 	//User Cancelling Ticket
