@@ -35,8 +35,8 @@ public class UserRepositoryTests {
 	@Test
 	@Disabled
 	public void testNames() {
-		String firstName = "praveen";
-		String secondName = "vicky";
+		String firstName = "someone";
+		String secondName = "noone";
 		Assertions.assertEquals(firstName, secondName);
 	}
 	
@@ -53,6 +53,19 @@ public class UserRepositoryTests {
 		Assertions.assertSame(false, users.isEmpty());
 	}
 	
+	//Testing User Service
+		@Test
+		public void testFetchNameFunction(){
+			String name = "user";
+			Mockito
+				.when(userService.getUserByName(name))
+					.thenReturn(
+						new User("user", "something","USER")
+						);
+			User users = userService.getUserByName(name);
+			Assertions.assertEquals(users, userService.getUserByName(name));
+		}
+	
 	//Testing the custom exception
 	@Test
 	public void testException(){
@@ -62,7 +75,7 @@ public class UserRepositoryTests {
 
 		Assertions.assertThrows(
 				UserException.class, ()->{
-					userService.dummyExceptionRaised();
+					userService.ExceptionRaisedFromService();
 		});
 
 	}

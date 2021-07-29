@@ -26,7 +26,7 @@ public class UserService {
 		return userRepository.getUserByUsername(name);
 	}
 	
-	   public void dummyExceptionRaised() throws UserException {
+	   public void ExceptionRaisedFromService() throws UserException {
 	        try{
 	            System.out.println("in service method");
 	                userRepository.count(); // sqlException

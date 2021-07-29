@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/v1.0/admin")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin()
 public class AirlineController {
 	
 	@Autowired

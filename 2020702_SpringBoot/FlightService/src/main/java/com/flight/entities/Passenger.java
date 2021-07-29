@@ -1,34 +1,15 @@
 package com.flight.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import javax.persistence.Embeddable;
 
-@Entity
-@JsonInclude(value = Include.NON_DEFAULT)
+@Embeddable
 public class Passenger {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int passengerId;
-	
 	private String passengerName;
 	private String passengerPreferences;
 	private int passengerAge;
 	private String passengerEmail;
 	private long passengerContact;
-	
-	@ManyToOne
-	@JoinColumn(name = "ticketId" , referencedColumnName = "ticketId")
-	@JsonIgnoreProperties("passenger")
-	private Booking booking;
-	
 
 
 	public Passenger()
@@ -36,13 +17,18 @@ public class Passenger {
 			
 	}
 	
-	public int getPassengerId() {
-		return passengerId;
+	
+	public Passenger(String passengerName, String passengerPreferences, int passengerAge, String passengerEmail,
+			long passengerContact) {
+		super();
+		this.passengerName = passengerName;
+		this.passengerPreferences = passengerPreferences;
+		this.passengerAge = passengerAge;
+		this.passengerEmail = passengerEmail;
+		this.passengerContact = passengerContact;
 	}
 
-	public void setPassengerId(int passengerId) {
-		this.passengerId = passengerId;
-	}
+
 
 	public String getPassengerName() {
 		return passengerName;
@@ -83,13 +69,13 @@ public class Passenger {
 	public void setPassengerContact(long passengerContact) {
 		this.passengerContact = passengerContact;
 	}
-	
-	public Booking getBooking() {
-		return booking;
+
+	@Override
+	public String toString() {
+		return "Passenger [passengerName=" + passengerName + ", passengerPreferences=" + passengerPreferences
+				+ ", passengerAge=" + passengerAge + ", passengerEmail=" + passengerEmail + ", passengerContact="
+				+ passengerContact + "]";
 	}
 
-	public void setBooking(Booking booking) {
-		this.booking = booking;
-	}
 	
 }

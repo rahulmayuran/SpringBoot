@@ -3,6 +3,7 @@ package com.flight.entities;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,9 +18,8 @@ public class Booking {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int ticketId;
 	private String PNR_number;
-	
-	@OneToMany(mappedBy = "booking")
-	@JsonIgnoreProperties("booking")
+
+	@ElementCollection
 	private List<Passenger> passenger;
 	
 	private Date startDate;

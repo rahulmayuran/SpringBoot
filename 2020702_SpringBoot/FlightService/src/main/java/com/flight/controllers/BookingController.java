@@ -32,10 +32,11 @@ public class BookingController
 	}
 	
 	@PostMapping("/booking/register")
+	@CrossOrigin(origins = "http://localhost:4200")
 	public Booking saveTicket(@RequestBody Booking saveBooking)
 	{
 		System.out.println("Saved Booking from Spring boot - "+saveBooking);
-		return bookingService.saveBooking(saveBooking);
+			return bookingService.saveBooking(saveBooking);
 	}
 	
 	@DeleteMapping("/booking/delete/{id}")

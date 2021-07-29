@@ -19,7 +19,7 @@ import com.admin.services.FlightService;
 
 @RestController
 @RequestMapping("/api/v1.0/admin")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin()
 public class FlightController {
 
 	@Autowired

@@ -26,16 +26,16 @@ public class UserApplication implements CommandLineRunner{
 	public static void main(String[] args) {
 		SpringApplication.run(UserApplication.class, args);
 	}
-	
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-	   return new WebMvcConfigurerAdapter() {
-	      @Override
-	      public void addCorsMappings(CorsRegistry registry) {
-	         registry.addMapping("/").allowedOrigins("http://localhost:4200");
-	      }  
-	   };
-	}
+//	
+//	@Bean
+//	public WebMvcConfigurer corsConfigurer() {
+//	   return new WebMvcConfigurerAdapter() {
+//	      @Override
+//	      public void addCorsMappings(CorsRegistry registry) {
+//	         registry.addMapping("/").allowedOrigins("http://localhost:4200");
+//	      }  
+//	   };
+//	}
 
 	@Value(value = "${Environment}")
 	String key;

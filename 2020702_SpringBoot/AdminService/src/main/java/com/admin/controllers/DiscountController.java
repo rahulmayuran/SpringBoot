@@ -19,7 +19,7 @@ import com.admin.services.DiscountService;
 
 @RestController
 @RequestMapping("/api/v1.0/admin")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin()
 public class DiscountController 
 {
 	
