@@ -43,13 +43,20 @@ public class UserRepositoryTests {
 	//Testing a functionality - List of Users
 	@Test
 	public void testAllUsers(){
+		
+		//Junit 5 Mockito
 		Mockito
+		//.when to check for repository methods
 		.when(userRepositoryTester.findAll())
-		.thenReturn(Arrays.asList(
+		//. thenReturn to check the expected result
+			.thenReturn(Arrays.asList(
 					new User("someone", "something","USER"),
 					new User("nobody", "noone","ADMIN")
 			));
+		
+		//trigger the service layer with an object
 		List<User> users = userService.getAllUsers();
+		//Assert it and compare with what you are expecting
 		Assertions.assertSame(false, users.isEmpty());
 	}
 	
@@ -58,12 +65,12 @@ public class UserRepositoryTests {
 		public void testFetchNameFunction(){
 			String name = "user";
 			Mockito
-				.when(userService.getUserByName(name))
+				.when(userRepositoryTester.getUserByUsername(name))
 					.thenReturn(
 						new User("user", "something","USER")
 						);
 			User users = userService.getUserByName(name);
-			Assertions.assertEquals(users, userService.getUserByName(name));
+			Assertions.assertEquals(name, users.getUsername());
 		}
 	
 	//Testing the custom exception
@@ -71,8 +78,10 @@ public class UserRepositoryTests {
 	public void testException(){
 		Mockito
 			.when(userRepositoryTester.count())
+			//.thenReturn is for normal methods, here it is thenThrow
 			.thenThrow(new NullPointerException("I tested an exception."));
 
+		//.assertThrows is to be used to check the class which is written for exception
 		Assertions.assertThrows(
 				UserException.class, ()->{
 					userService.ExceptionRaisedFromService();

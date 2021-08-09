@@ -13,7 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableEurekaClient
-@ComponentScan(basePackages = { "com.admin*"})
+@ComponentScan(basePackages = { "com.admin"})
 @EnableCaching
 @EnableSwagger2
 public class AdminApplication {

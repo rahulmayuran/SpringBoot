@@ -11,6 +11,9 @@ public interface FlightRepository extends JpaRepository<Flight, Integer>{
 
 	@Query("SELECT f FROM Flight f WHERE f.journey = ?1 and f.destination = ?2")
 	public List<Flight> getFlightsByJourneyAndDestination(String journey,String destination);
+	
+	
+//	public List<Flight> findByJourney(String journey);
 
 
 }
