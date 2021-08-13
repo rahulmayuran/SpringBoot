@@ -22,6 +22,7 @@ public class UserRepositoryTests {
 	@Autowired
 	UserService userService;
 
+	//
 	@MockBean
 	UserRepository userRepositoryTester;
 

@@ -5,7 +5,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class Discount {
 
 	@Id
@@ -60,6 +65,12 @@ public class Discount {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "Discount [discountId=" + discountId + ", discountName=" + discountName + ", discountValue="
+				+ discountValue + ", status=" + status + "]";
 	}
 	
 	
