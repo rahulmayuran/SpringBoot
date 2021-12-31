@@ -1,0 +1,56 @@
+{
+	"info": {
+		"_postman_id": "9fd0e614-a98a-4fd3-bd7d-53b90e7d12b3",
+		"name": "UserService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Adding User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\" : 1,\r\n    \"emailId\" : \"none@dummy.com\",\r\n    \"username\": \"user\",\r\n    \"password\": \"user\",\r\n    \"role\": \"user\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9052/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9052",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9052/getUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9052",
+					"path": [
+						"getUsers"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
