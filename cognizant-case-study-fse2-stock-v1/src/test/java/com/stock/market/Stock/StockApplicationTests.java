@@ -1,10 +1,10 @@
-package com.stock.market.cognizantcasestudyfse2companyv1;
+package com.stock.market.Stock;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CognizantCaseStudyFse2CompanyV1ApplicationTests {
+class StockApplicationTests {
 
 	@Test
 	void contextLoads() {

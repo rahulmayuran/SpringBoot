@@ -1,7 +1,7 @@
-package com.stock.market.cognizantcasestudyfse2stockv1.Controller;
+package com.stock.market.Stock.Controller;
 
-import com.stock.market.cognizantcasestudyfse2stockv1.Model.Stock;
-import com.stock.market.cognizantcasestudyfse2stockv1.Service.StockService;
+import com.stock.market.Stock.Model.Stock;
+import com.stock.market.Stock.Service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

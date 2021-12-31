@@ -1,13 +1,13 @@
-package com.stock.market.cognizantcasestudyfse2stockv1;
+package com.stock.market.Stock;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CognizantCaseStudyFse2StockV1Application {
+public class StockApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CognizantCaseStudyFse2StockV1Application.class, args);
+		SpringApplication.run(StockApplication.class, args);
 	}
 
 }

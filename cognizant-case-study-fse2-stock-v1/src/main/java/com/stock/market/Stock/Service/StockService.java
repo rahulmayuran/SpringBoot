@@ -1,7 +1,7 @@
-package com.stock.market.cognizantcasestudyfse2stockv1.Service;
+package com.stock.market.Stock.Service;
 
-import com.stock.market.cognizantcasestudyfse2stockv1.Model.Stock;
-import com.stock.market.cognizantcasestudyfse2stockv1.Repository.StockRepository;
+import com.stock.market.Stock.Model.Stock;
+import com.stock.market.Stock.Repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

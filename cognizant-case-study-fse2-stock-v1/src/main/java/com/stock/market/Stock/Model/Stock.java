@@ -1,13 +1,11 @@
-package com.stock.market.cognizantcasestudyfse2stockv1.Model;
+package com.stock.market.Stock.Model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 @Document("stock")
 public class Stock

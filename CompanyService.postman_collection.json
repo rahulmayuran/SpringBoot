@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "e6c97067-3d69-450b-b108-6db87678f0c2",
+		"name": "CompanyService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add Company",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"companyId\" : 1,\r\n    \"companyCode\" : \"cef0cbf3-6458-4f13-a418-ee4d7e7505dd\",\r\n    \"companyName\" : \"ZOMATO\",\r\n    \"companyCEO\" : \"Deepinder Goyal\",\r\n    \"companyWebsite\" : \"https://www.zomato.com\",\r\n    \"companyTurnover\" : \"522 crores\",\r\n    \"isNSE\":true,\r\n    \"isBSE\":false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9053/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9053",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch all companies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9053/api/getCompanies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9053",
+					"path": [
+						"api",
+						"getCompanies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch company by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9053/api/getCompany/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9053",
+					"path": [
+						"api",
+						"getCompany",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Company by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9053/api/delete/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9053",
+					"path": [
+						"api",
+						"delete",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
