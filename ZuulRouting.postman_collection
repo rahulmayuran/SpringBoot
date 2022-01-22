@@ -1,0 +1,72 @@
+{
+	"info": {
+		"_postman_id": "6fb54a53-ee2d-4923-b2df-d7b254c7845d",
+		"name": "ZuulRouting-AllGetCalls",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Fetch All Stocks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9049/stock/api/getStocks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9049",
+					"path": [
+						"stock",
+						"api",
+						"getStocks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch all Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9049/user/api/getUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9049",
+					"path": [
+						"user",
+						"api",
+						"getUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch all Companies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9049/company/api/getCompanies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9049",
+					"path": [
+						"company",
+						"api",
+						"getCompanies"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
