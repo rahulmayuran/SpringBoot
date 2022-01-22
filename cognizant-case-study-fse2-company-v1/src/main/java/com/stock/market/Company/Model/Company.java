@@ -1,20 +1,16 @@
 package com.stock.market.Company.Model;
 
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
 
 @Document("company")
-@Data
-@ToString
-@NoArgsConstructor
 public class Company
 {
     @Id
@@ -23,7 +19,7 @@ public class Company
     
     @JsonProperty("companyCode")
     private UUID companyCode;
-    
+   
     @JsonProperty("companyName")
     private String companyName;
     
@@ -41,4 +37,98 @@ public class Company
     
     @JsonProperty("isBSE")
     private boolean isBSE;
+
+    public Company(){
+
+    }
+
+    public Company(int companyId, UUID companyCode, String companyName, String companyCEO, String companyWebsite, String companyTurnover, boolean isNSE, boolean isBSE) {
+        this.companyId = companyId;
+        this.companyCode = companyCode;
+        this.companyName = companyName;
+        this.companyCEO = companyCEO;
+        this.companyWebsite = companyWebsite;
+        this.companyTurnover = companyTurnover;
+        this.isNSE = isNSE;
+        this.isBSE = isBSE;
+
+    }
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
+
+    public UUID getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(UUID companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyCEO() {
+        return companyCEO;
+    }
+
+    public void setCompanyCEO(String companyCEO) {
+        this.companyCEO = companyCEO;
+    }
+
+    public String getCompanyWebsite() {
+        return companyWebsite;
+    }
+
+    public void setCompanyWebsite(String companyWebsite) {
+        this.companyWebsite = companyWebsite;
+    }
+
+    public String getCompanyTurnover() {
+        return companyTurnover;
+    }
+
+    public void setCompanyTurnover(String companyTurnover) {
+        this.companyTurnover = companyTurnover;
+    }
+
+    public boolean isNSE() {
+		return isNSE;
+	}
+
+	public void setNSE(boolean isNSE) {
+		this.isNSE = isNSE;
+	}
+
+	public boolean isBSE() {
+		return isBSE;
+	}
+
+	public void setBSE(boolean isBSE) {
+		this.isBSE = isBSE;
+	}
+
+	@Override
+    public String toString() {
+        return "Company{" +
+                "companyId=" + companyId +
+                ", companyCode=" + companyCode +
+                ", companyName='" + companyName + '\'' +
+                ", companyCEO='" + companyCEO + '\'' +
+                ", companyWebsite='" + companyWebsite + '\'' +
+                ", companyTurnover=" + companyTurnover +
+                ", isNSE=" + isNSE +
+                ", isBSE=" + isBSE +
+                '}';
+    }
 }

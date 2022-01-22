@@ -16,10 +16,10 @@ import java.util.Arrays;
 @EnableDiscoveryClient
 @EnableZuulProxy
 @CrossOrigin(origins = "*",allowedHeaders = "*",allowCredentials = "true")
-public class CognizantCaseStudyFse2ZuulRouterV1Application {
+public class ZuulRouter {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CognizantCaseStudyFse2ZuulRouterV1Application.class, args);
+		SpringApplication.run(ZuulRouter.class, args);
 	}
 
 	@Bean
