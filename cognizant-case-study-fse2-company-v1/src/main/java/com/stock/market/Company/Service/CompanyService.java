@@ -19,7 +19,6 @@ public class CompanyService {
     }
 
     public void deleteCompany(int id){
-        System.out.println("Company with id - "+id+" deleted");
         companyRepository.deleteById(id);
         return;
     }

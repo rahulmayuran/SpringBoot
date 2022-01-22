@@ -18,10 +18,10 @@ public class CompanyController {
 
     @PostMapping("/register")
     public Company addCompany(@RequestBody Company company) {
-        System.out.println("Added Company from Spring Boot - "+company);
+    	System.out.println("Company added "+company);
         return companyService.addCompany(company);
     }
-
+    
     @DeleteMapping("/delete/{id}")
     public String deleteCompany(@PathVariable int id){
         companyService.deleteCompany(id);
