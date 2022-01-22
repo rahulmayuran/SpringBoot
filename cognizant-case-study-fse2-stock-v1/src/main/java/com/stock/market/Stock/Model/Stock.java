@@ -3,6 +3,8 @@ package com.stock.market.Stock.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,23 +16,37 @@ public class Stock
 {
     @Id
     @JsonProperty("stockId")
+    @Schema(description = "Unique identifier of the Contact.", 
+    example = "1", required = false)
     private int stockId;
     
     @JsonProperty("avgStockPrice")
+    @Schema(description = "Average price of stock.", 
+    example = "40.34", required = false)
     private float avgStockPrice;
     
     @JsonProperty("minStockPrice")
+    @Schema(description = "Minimum price of stock.", 
+    example = "32.34", required = false)
     private float minStockPrice;
     
     @JsonProperty("maxStockPrice")
+    @Schema(description = "Maximum price of stock.", 
+    example = "45.34", required = false)
     private float maxStockPrice;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Schema(description = "Start Date.", 
+    example = "2022-01-11", required = false)
     private LocalDate startDate;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Schema(description = "End Date.", 
+    example = "2022-01-11", required = false)
     private LocalDate endDate;
     
+    @Schema(description = "Time added.", 
+    	    example = "12:56 pm", required = false)
     public LocalTime currentTime = LocalTime.now();
 
     public Stock(){
