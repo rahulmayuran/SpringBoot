@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-//@CrossOrigin
+@CrossOrigin
 @Tag(name = "stock", description = "The stocks API")
 public class StockController {
 
@@ -32,7 +32,7 @@ public class StockController {
                 content = @Content(schema = @Schema(implementation = Stock.class))), 
         @ApiResponse(responseCode = "400", description = "Invalid input"), 
         @ApiResponse(responseCode = "409", description = "Stock already exists") })
-    @RequestMapping(method = RequestMethod.POST, value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE )
+    @RequestMapping(method = RequestMethod.POST, value = "/stock/register", consumes = MediaType.APPLICATION_JSON_VALUE )
     public Stock addStock(@RequestBody Stock stock) {
         System.out.println("Added stock from Spring Boot - "+stock);
         return stockService.addStock(stock);

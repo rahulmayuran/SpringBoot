@@ -1,14 +1,11 @@
 package com.stock.market.Company.Model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Document("company")
 public class Company
