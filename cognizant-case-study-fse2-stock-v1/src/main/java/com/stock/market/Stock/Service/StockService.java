@@ -5,6 +5,7 @@ import com.stock.market.Stock.Repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,11 @@ public class StockService {
 
     public List<Stock> getAllStocks(){
         return stockRepository.findAll();
+    }
+    
+    public List<Stock> dateFilteredStocks(LocalDate start, LocalDate end){
+		return stockRepository.getStocksBasedOnDates(start, end);
+    	
     }
 
 

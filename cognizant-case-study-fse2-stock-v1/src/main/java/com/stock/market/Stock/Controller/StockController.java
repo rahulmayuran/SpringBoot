@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,4 +71,16 @@ public class StockController {
         stocks.forEach(System.out::println);
         return stocks;
     }
+    
+    @GetMapping("/stock/search")
+    public List<Stock> dateBasedStocks(@RequestParam(value = "startDate") LocalDate startDate,
+    		@RequestParam(value = "endDate") LocalDate endDate){
+    	try {
+			return stockService.dateFilteredStocks(startDate, endDate);
+		} catch (Exception e)
+		{
+			System.out.println(e);
+		}
+		return new ArrayList<>();
+	}
 }
