@@ -24,7 +24,7 @@ public class Stock
     @JsonProperty("stockId")
     @Schema(description = "Unique identifier of the Contact.", 
     example = "1", required = false)
-    private int stockId;
+    private String stockId;
     
     @JsonProperty("companyName")
     private String companyName;

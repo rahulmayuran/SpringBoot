@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +41,10 @@ public class StockService {
     	Date startDate = new Date();
     	Date endDate = new Date();
     	
+    	if(fromDate==null||toDate == null) {
+    		System.out.println("Dates are null");
+    		return new ArrayList<>();
+    	}
     	try 
     	{
     		startDate = simpleDateFormat.parse(fromDate+" 00:00:00");
