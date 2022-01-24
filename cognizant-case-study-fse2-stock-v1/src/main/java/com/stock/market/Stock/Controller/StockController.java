@@ -1,7 +1,9 @@
 package com.stock.market.Stock.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.stock.market.Stock.Model.Stock;
@@ -16,8 +18,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -35,16 +41,41 @@ public class StockController {
         @ApiResponse(responseCode = "400", description = "Invalid input"), 
         @ApiResponse(responseCode = "409", description = "Stock already exists") })
     @RequestMapping(method = RequestMethod.POST, value = "/stock/register", consumes = MediaType.APPLICATION_JSON_VALUE )
-    public Stock addStock(@RequestBody Stock stock) {
+    public ResponseEntity<Stock> addStock(@RequestBody Stock stock) 
+    {
         System.out.println("Added stock from Spring Boot - "+stock);
-        return stockService.addStock(stock);
+ 	
+    	if(stockService.getAllStocks().size() == 0)
+    	{ 	
+    		stock.setStockId(1);
+    		stock.setStockDate(new Date());
+    		
+        	Stock freshStock = stockService.addStock(stock);
+            System.out.println("Company added "+freshStock);
+            return new ResponseEntity<>(freshStock, HttpStatus.OK); 
+    	}
+    	else {
+    		
+    		 int maxId = stockService.getAllStocks()
+    	    			.stream()
+    	                .max(Comparator.comparing(Stock::getStockId))
+    	                .get()
+    	                .getStockId();
+    		  
+    		stock.setStockId(maxId+1);
+    		stock.setStockDate(new Date());
+    		
+        	Stock addOtherStock = stockService.addStock(stock);
+            System.out.println("Company added "+addOtherStock);
+            return new ResponseEntity<>(addOtherStock, HttpStatus.OK);
+    	}
     }
 
     @Operation(summary = "Deletes a Stock", description = "", tags = { "stock" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "successful operation"),
         @ApiResponse(responseCode = "404", description = "stock not found") })
-    @RequestMapping(method = RequestMethod.DELETE, value ="/delete/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value ="stock/delete/{id}")
     public String deleteStock(@PathVariable int id){
         stockService.deleteStock(id);
         return "Stock with id - "+id+" deleted";
@@ -72,11 +103,25 @@ public class StockController {
         return stocks;
     }
     
-    @GetMapping("/stock/search")
-    public List<Stock> dateBasedStocks(@RequestParam(value = "startDate") LocalDate startDate,
-    		@RequestParam(value = "endDate") LocalDate endDate){
-    	try {
-			return stockService.dateFilteredStocks(startDate, endDate);
+    @GetMapping("/stock/search/{startDate}/{endDate}")
+    public List<Stock> dateBasedStocks(
+    		@PathVariable String startDate,
+    		@PathVariable String endDate
+    		){
+    	try { 
+    		stockService.getAllStocks()
+    		.stream()
+    		.forEach(e->
+    		{
+    			System.out.println("Start("+e.getStockDate()+")");
+    		});
+    		
+    		System.out.println("Path variables -> "+startDate+" to "+endDate);
+    		
+    		List<Stock> resultStock = stockService.dateFilteredStocks(startDate, endDate);
+    		System.out.println("Spring :: Filtered stocks from "+startDate+" to "+endDate+" are "+resultStock);
+   
+			return resultStock;
 		} catch (Exception e)
 		{
 			System.out.println(e);

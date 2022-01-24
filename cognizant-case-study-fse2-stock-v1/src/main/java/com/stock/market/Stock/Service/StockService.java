@@ -5,7 +5,10 @@ import com.stock.market.Stock.Repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +36,25 @@ public class StockService {
         return stockRepository.findAll();
     }
     
-    public List<Stock> dateFilteredStocks(LocalDate start, LocalDate end){
-		return stockRepository.getStocksBasedOnDates(start, end);
+    public List<Stock> dateFilteredStocks(String fromDate, String toDate)
+    {
+    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:s");
+    	Date startDate = new Date();
+    	Date endDate = new Date();
     	
+    	try 
+    	{
+    		startDate = simpleDateFormat.parse(fromDate+" 00:00:00");
+    		endDate = simpleDateFormat.parse(toDate +" 23:59:59");
+    		System.out.println("Parsed Dates {"+startDate+"}"+endDate);
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	
+		return stockRepository.getStocksBasedOnDates(startDate, endDate);
+
+    	      	
     }
 
 
