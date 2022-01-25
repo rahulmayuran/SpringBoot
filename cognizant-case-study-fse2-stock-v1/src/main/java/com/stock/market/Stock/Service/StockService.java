@@ -21,13 +21,13 @@ public class StockService {
         return stockRepository.save(stock);
     }
 
-    public void deleteStock(int id){
+    public void deleteStock(String id){
         System.out.println("Stock with id - "+id+" deleted");
         stockRepository.deleteById(id);
         return;
     }
 
-    public Optional<Stock> getStockById(int id){
+    public Optional<Stock> getStockById(String id){
         return stockRepository.findById(id);
     }
 

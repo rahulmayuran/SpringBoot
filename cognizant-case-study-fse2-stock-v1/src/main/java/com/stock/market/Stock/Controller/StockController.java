@@ -6,13 +6,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.ws.rs.core.Response.ResponseBuilder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,12 +42,7 @@ public class StockController {
     StockService stockService;
 
     @Operation(summary = "Add a new stock", description = "", tags = { "stock" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "Stock created",
-                content = @Content(schema = @Schema(implementation = Stock.class))), 
-        @ApiResponse(responseCode = "400", description = "Invalid input"), 
-        @ApiResponse(responseCode = "409", description = "Stock already exists") })
-    @RequestMapping(method = RequestMethod.POST, value = "/stock/register", consumes = MediaType.APPLICATION_JSON_VALUE )
+    @PostMapping(value = "/stock/register")
     public ResponseEntity<Stock> addStock(@RequestBody Stock stock) 
     {
  	
@@ -59,43 +58,44 @@ public class StockController {
     }
 
     @Operation(summary = "Deletes a Stock", description = "", tags = { "stock" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successful operation"),
-        @ApiResponse(responseCode = "404", description = "stock not found") })
-    @RequestMapping(method = RequestMethod.DELETE, value ="stock/delete/{id}")
-    public String deleteStock(@PathVariable int id){
-        stockService.deleteStock(id);
-        return "Stock with id - "+id+" deleted";
+    @DeleteMapping(value ="stock/delete/{id}")
+    public ResponseEntity<String> deleteStock(@PathVariable String id)
+    {
+    	if(id!=null)
+    	{
+    		stockService.deleteStock(id);
+	        return new ResponseEntity<String>("Deleted Stock",HttpStatus.ACCEPTED);
+    	}
+    	return new ResponseEntity<String>("Id not found",HttpStatus.NOT_FOUND);
+      
     }
     
     @Operation(summary = "Find stock by ID", description = "Returns a single stock", tags = { "stock" })
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "successful operation",
-                content = @Content(schema = @Schema(implementation = Stock.class))),
-        @ApiResponse(responseCode = "404", description = "Contact not found") })
-    @RequestMapping(method = RequestMethod.GET, value = "getStock/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Optional<Stock> getStockById(@PathVariable int id){
-        return stockService.getStockById(id);
+    @GetMapping(value = "getStock/{id}")
+    public ResponseEntity<Stock> getStockById(@PathVariable String id)
+    {
+    		Optional<Stock> stock = stockService.getStockById(id);
+			return ResponseEntity.of(stock);
     }
     
     @Operation(summary = "Fetch all stocks", description = "", tags = { "stock" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Stocks fetched"), 
-        @ApiResponse(responseCode = "404", description = "Stocks not found") })
-    @RequestMapping(method = RequestMethod.GET, value ="/getStocks", produces = "application/json")
-    public List<Stock> getAllStocks()
+    @GetMapping(value ="/getStocks")
+    public ResponseEntity<List<Stock>> getAllStocks()
     {
         List<Stock> stocks = stockService.getAllStocks();
+        if(stocks.size()==0) {
+        	return new ResponseEntity<List<Stock>>(HttpStatus.NOT_FOUND);
+        }
         stocks.forEach(System.out::println);
-        return stocks;
+        return new ResponseEntity<List<Stock>>(stocks, HttpStatus.OK);
     }
     
     @GetMapping("/stock/search/{startDate}/{endDate}")
-    public List<Stock> dateBasedStocks(@PathVariable String startDate, @PathVariable String endDate)
+    public ResponseEntity<List<Stock>> dateBasedStocks(@PathVariable String startDate, @PathVariable String endDate)
     {
-    	if(startDate==null||endDate == null) {
+    	if(startDate==null||endDate == null||startDate==""||endDate=="") {
     		System.out.println("Dates are null");
-    		return new ArrayList<>();
+    		return new ResponseEntity<List<Stock>>(HttpStatus.BAD_REQUEST);
     	}
     	try { 
     		stockService.getAllStocks()
@@ -110,11 +110,11 @@ public class StockController {
     		List<Stock> resultStock = stockService.dateFilteredStocks(startDate, endDate);
     		System.out.println("Spring :: found stocks from "+startDate+" to "+endDate+" are "+resultStock.size());
    
-			return resultStock;
+			return new ResponseEntity<List<Stock>>(resultStock, HttpStatus.OK);
 		} catch (Exception e)
 		{
 			System.out.println(e);
 		}
-		return new ArrayList<>();
+		return new ResponseEntity<List<Stock>>(HttpStatus.BAD_GATEWAY);
 	}
 }
