@@ -1,6 +1,5 @@
 package com.stock.market.Stock.Controller;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -8,9 +7,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,6 +40,9 @@ public class StockController {
 
     @Autowired
     StockService stockService;
+    
+    @Autowired
+    MongoTemplate mongoTemplate;
 
     @Operation(summary = "Add a new stock", description = "", tags = { "stock" })
     @PostMapping(value = "/stock/register")
@@ -54,17 +60,21 @@ public class StockController {
     	
     }
 
-    @Operation(summary = "Deletes a Stock", description = "", tags = { "stock" })
+	@SuppressWarnings("static-access")
+	@Operation(summary = "Deletes a Stock", description = "", tags = { "stock" })
     @DeleteMapping(value ="stock/delete/{id}")
     public ResponseEntity<String> deleteStock(@PathVariable String id)
     {
-    	if(id!=null)
-    	{
-    		stockService.deleteStock(id);
-	        return new ResponseEntity<String>("Deleted Stock",HttpStatus.ACCEPTED);
-    	}
-    	return new ResponseEntity<String>("Id not found",HttpStatus.NOT_FOUND);
-      
+    	ResponseEntity<String> response = new ResponseEntity<String>(HttpStatus.OK);
+    		try 
+    		{
+			stockService.deleteStock(id);
+			response.ok("Deleted Stock with id"+id).status(HttpStatus.OK);
+			} 
+    		catch (Exception e) {
+				response.status(HttpStatus.BAD_REQUEST).body("Exception occured while deleting "+e);
+			}
+			return response.badRequest().body("Id doesn't exist");
     }
     
     @Operation(summary = "Find stock by ID", description = "Returns a single stock", tags = { "stock" })
@@ -72,14 +82,6 @@ public class StockController {
     public ResponseEntity<Stock> getStockById(@PathVariable String id)
     {
     		Optional<Stock> stock = stockService.getStockById(id);
-			return ResponseEntity.of(stock);
-    }
-    
-    @Operation(summary = "Find stock by CompanyName", description = "Returns a list of stocks", tags = { "stock" })
-    @GetMapping(value = "getStock/{name}")
-    public ResponseEntity<List<Stock>> getStockByCompanyName(@PathVariable String name)
-    {
-    		Optional<List<Stock>> stock = stockService.getStockByCompanyName(name);
 			return ResponseEntity.of(stock);
     }
     
@@ -129,21 +131,24 @@ public class StockController {
     {
         List<Stock> stocks = stockService.getAllStocks();
 
-        //["A","B","C"]
         List<String> companyNames = stocks.stream()
         		.map(s->s.getCompanyName())
         		.distinct()
         		.collect(Collectors.toList());
+        System.out.println("Company Names list "+companyNames);
         
         List<AggregateStocks> aggregatedStocks = new ArrayList<AggregateStocks>();
         
         for (String companyName : companyNames) 
         {
-        	//[45.44, 32.22, 102.33, 34.33, 22.35, 21.22]
+        	//n lists will be created, n=number of companies
         	List<Float> pricingList = stocks.stream()
         			.filter(s->s.getCompanyName().equals(companyName))
         			.map(p->p.getStockPrice())
         			.collect(Collectors.toList());
+        	
+        	System.out.println("Pricing List is "+pricingList);
+        	pricingList.forEach(s->{System.out.println("Prices "+s);});
         	
         	float min = pricingList.stream()
         			 .min(Comparator.comparing(Float::valueOf))
@@ -171,9 +176,31 @@ public class StockController {
         
         if(stocks.size()==0) 
         {
-        	return new ResponseEntity<List<AggregateStocks>>(HttpStatus.NOT_FOUND);
+        	return new ResponseEntity<List<AggregateStocks>>(aggregatedStocks, HttpStatus.NOT_FOUND);
         }
-        stocks.forEach(System.out::println);
+        
         return new ResponseEntity<List<AggregateStocks>>(aggregatedStocks, HttpStatus.OK);
+    }
+    
+    @Operation(summary = "Fetch all stocks by Mongo DB", description = "", tags = { "stock" })
+    @GetMapping(value ="/getStocks/aggregation")
+    public List<AggregateStocks> getStocksByMongoDBAggregation()
+    {
+    	List<Stock> stockList = stockService.getAllStocks();
+    	
+    	 Aggregation aggregation = Aggregation.newAggregation(
+    			 	Aggregation.match(Criteria.where("companyName")
+    			 			.in(stockList.stream().map(e->e.getCompanyName()).collect(Collectors.toList() ) )),
+    	            Aggregation.group("companyName")
+    	            	.min("companyName").as("companyName")
+	    	            .avg("stockPrice").as("avgStockPrice")
+	    	            .min("stockPrice").as("minStockPrice")
+	    	            .max("stockPrice").as("maxStockPrice"),
+    			 	Aggregation.project("companyName", "avgStockPrice", "minStockPrice", "maxStockPrice"));
+    	 
+    	 //mongoTemplate.aggregate(Aggregation instance, Collection/Table Name, ResultClassToBeMapped)
+    	 AggregationResults<AggregateStocks> groupResults = mongoTemplate.aggregate(aggregation, "stock", AggregateStocks.class);
+    	 List<AggregateStocks> aggregatedStocks = groupResults.getMappedResults();
+    	 return aggregatedStocks;
     }
 }

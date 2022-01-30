@@ -1,15 +1,16 @@
 package com.stock.market.Stock.Service;
 
-import com.stock.market.Stock.Model.Stock;
-import com.stock.market.Stock.Repository.StockRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.stock.market.Stock.Model.Stock;
+import com.stock.market.Stock.Repository.StockRepository;
 
 @Service
 public class StockService {
@@ -34,6 +35,7 @@ public class StockService {
     public List<Stock> getAllStocks(){
         return stockRepository.findAll();
     }
+
     
     public List<Stock> dateFilteredStocks(String fromDate, String toDate)
     {
@@ -49,21 +51,13 @@ public class StockService {
     	{
     		startDate = simpleDateFormat.parse(fromDate+" 00:00:00");
     		endDate = simpleDateFormat.parse(toDate +" 23:59:59");
-    		System.out.println("Parsed Dates {"+startDate+"}"+endDate);
+    		System.out.println("Parsed Dates {"+startDate+"}-{"+endDate+"}");
     	}
     	catch(Exception e){
     		e.printStackTrace();
     	}
-    	
-		return stockRepository.getStocksBasedOnDates(startDate, endDate);
-
-    	      	
+		return stockRepository.getStocksBasedOnDates(startDate, endDate);	      	
     }
-
-	public Optional<List<Stock>> getStockByCompanyName(String name) 
-	{
-		return stockRepository.findByCompanyName(name);
-	}
 
 
 }
