@@ -60,5 +60,10 @@ public class StockService {
     	      	
     }
 
+	public Optional<List<Stock>> getStockByCompanyName(String name) 
+	{
+		return stockRepository.findByCompanyName(name);
+	}
+
 
 }
