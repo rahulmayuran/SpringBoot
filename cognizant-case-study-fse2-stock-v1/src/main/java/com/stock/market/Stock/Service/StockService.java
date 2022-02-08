@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.stock.market.Stock.Model.Stock;
@@ -17,6 +19,14 @@ public class StockService {
 
     @Autowired
     StockRepository stockRepository;
+    
+    @Autowired
+    KafkaTemplate<String, String> kafkaTemplate;
+    
+    @Bean
+    public void TestingKafkaMessages() {
+    	kafkaTemplate.send("fse_stock", "Inside Stock Service ~ " + (float)(Math.round(Math.random() * 100.0) / 100.0));
+    }
 
     public Stock addStock(Stock stock) {
         return stockRepository.save(stock);

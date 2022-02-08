@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,13 +30,9 @@ import com.stock.market.Stock.Model.AggregateStocks;
 import com.stock.market.Stock.Model.Stock;
 import com.stock.market.Stock.Service.StockService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
-@Tag(name = "stock", description = "The stocks API")
 public class StockController {
 
     @Autowired
@@ -44,7 +41,6 @@ public class StockController {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @Operation(summary = "Add a new stock", description = "", tags = { "stock" })
     @PostMapping(value = "/stock/register")
     public ResponseEntity<Stock> addStock(@RequestBody Stock stock) 
     {
@@ -61,7 +57,6 @@ public class StockController {
     }
 
 	@SuppressWarnings("static-access")
-	@Operation(summary = "Deletes a Stock", description = "", tags = { "stock" })
     @DeleteMapping(value ="stock/delete/{id}")
     public ResponseEntity<String> deleteStock(@PathVariable String id)
     {
@@ -77,7 +72,6 @@ public class StockController {
 			return response.badRequest().body("Id doesn't exist");
     }
     
-    @Operation(summary = "Find stock by ID", description = "Returns a single stock", tags = { "stock" })
     @GetMapping(value = "getStock/{id}")
     public ResponseEntity<Stock> getStockById(@PathVariable String id)
     {
@@ -85,7 +79,6 @@ public class StockController {
 			return ResponseEntity.of(stock);
     }
     
-    @Operation(summary = "Fetch all stocks", description = "", tags = { "stock" })
     @GetMapping(value ="/getStocks")
     public ResponseEntity<List<Stock>> getAllStocks()
     {
@@ -94,7 +87,9 @@ public class StockController {
         	return new ResponseEntity<List<Stock>>(HttpStatus.NOT_FOUND);
         }
         stocks.forEach(System.out::println);
+        
         return new ResponseEntity<List<Stock>>(stocks, HttpStatus.OK);
+      
     }
     
     @GetMapping("/stock/search/{startDate}/{endDate}")
@@ -125,7 +120,6 @@ public class StockController {
 		return new ResponseEntity<List<Stock>>(HttpStatus.BAD_GATEWAY);
 	}
     
-    @Operation(summary = "Fetch all stocks based on Company", description = "", tags = { "stock" })
     @GetMapping(value ="/getStocks/price")
     public ResponseEntity<List<AggregateStocks>> getAllStocksByPrice()
     {
@@ -182,7 +176,6 @@ public class StockController {
         return new ResponseEntity<List<AggregateStocks>>(aggregatedStocks, HttpStatus.OK);
     }
     
-    @Operation(summary = "Fetch all stocks by Mongo DB", description = "", tags = { "stock" })
     @GetMapping(value ="/getStocks/aggregation")
     public List<AggregateStocks> getStocksByMongoDBAggregation()
     {
