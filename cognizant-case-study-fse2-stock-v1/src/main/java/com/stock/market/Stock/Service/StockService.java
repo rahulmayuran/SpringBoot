@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.kafka.common.Uuid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -25,7 +26,7 @@ public class StockService {
     
     @Bean
     public void TestingKafkaMessages() {
-    	kafkaTemplate.send("fse_stock", "Inside Stock Service ~ " + (float)(Math.round(Math.random() * 100.0) / 100.0));
+    	kafkaTemplate.send("fse_stock", "Inside Stock Service ~ " + Uuid.randomUuid());
     }
 
     public Stock addStock(Stock stock) {
