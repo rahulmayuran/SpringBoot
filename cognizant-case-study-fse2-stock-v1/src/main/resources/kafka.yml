@@ -1,0 +1,39 @@
+version: "3"
+services:
+  zookeeper:
+    image: zookeeper
+    hostname: zookeeper
+    restart: unless-stopped
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    expose:
+      - "2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOO_MY_ID: 1 
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+  kafka-manager:
+    image: hlebalbau/kafka-manager:stable
+    container_name: kafka-manager
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    environment:
+      APPLICATION_SECRET: "random-secret"
+      ZK_HOSTS: zookeeper:2181
+    command: -Dpidfile.path=/dev/null
+     
