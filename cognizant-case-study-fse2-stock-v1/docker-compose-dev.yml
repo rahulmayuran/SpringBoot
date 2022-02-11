@@ -78,17 +78,13 @@ services:
       - "9200:9200"
   kibana:
     container_name: kibana
-    image: docker.elastic.co/kibana/kibana:7.4.0
+    image: docker.elastic.co/kibana/kibana:7.8.0
     volumes:
       - "./configs/kibana.yml:/usr/share/kibana/config/kibana.yml"
     restart: unless-stopped
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports:
       - "5601:5601"
     links:
       - elasticsearch
     depends_on:
       - elasticsearch
-volumes:
-  elasticsearch-data:
