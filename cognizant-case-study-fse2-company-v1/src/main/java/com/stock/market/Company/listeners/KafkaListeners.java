@@ -6,7 +6,7 @@
  * 
  * @Component public class KafkaListeners {
  * 
- * @KafkaListener(topics = {"fse_company"}, groupId = "companyGroup") void
+ * @KafkaListener(topics = "fse_company", groupId = "logstash") void
  * listener(String data) { System.out.println("From Kafka Listener -> "+data);
  * }; }
  */
