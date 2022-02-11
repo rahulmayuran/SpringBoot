@@ -79,6 +79,8 @@ services:
   kibana:
     container_name: kibana
     image: docker.elastic.co/kibana/kibana:7.4.0
+    volumes:
+      - "./configs/kibana.yml:/usr/share/kibana/config/kibana.yml"
     restart: unless-stopped
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
