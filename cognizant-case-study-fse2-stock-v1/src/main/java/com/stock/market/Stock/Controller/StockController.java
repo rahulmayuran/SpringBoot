@@ -9,7 +9,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -32,9 +31,12 @@ import com.stock.market.Stock.Model.AggregateStocks;
 import com.stock.market.Stock.Model.Stock;
 import com.stock.market.Stock.Service.StockService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
+@Slf4j
 public class StockController {
 
 	@Autowired
@@ -50,7 +52,7 @@ public class StockController {
 	private KafkaTemplate<String, String> kafkaTemplate;
 
 	@PostMapping(value = "/stock/register")
-	public ResponseEntity<Stock> addStock(@RequestBody Stock stock) {
+	public ResponseEntity<Stock> addStock(@RequestBody Stock stock) throws JsonProcessingException {
 
 		UUID setUUID = UUID.randomUUID();
 
@@ -58,7 +60,10 @@ public class StockController {
 		stock.setStockDate(new Date());
 
 		Stock addOtherStock = stockService.addStock(stock);
-		System.out.println("Company added " + addOtherStock);
+		log.info("Company added " + addOtherStock);
+		
+		kafkaTemplate.send("fse_stock", " Added Stock -> "+addOtherStock);
+		
 		return new ResponseEntity<>(addOtherStock, HttpStatus.OK);
 
 	}
@@ -70,7 +75,8 @@ public class StockController {
 		try {
 			stockService.deleteStock(id);
 			response.ok("Deleted Stock with id" + id).status(HttpStatus.OK);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			response.status(HttpStatus.BAD_REQUEST).body("Exception occured while deleting " + e);
 		}
 		return response.badRequest().body("Id doesn't exist");
@@ -96,23 +102,23 @@ public class StockController {
 	@GetMapping("/stock/search/{startDate}/{endDate}")
 	public ResponseEntity<List<Stock>> dateBasedStocks(@PathVariable String startDate, @PathVariable String endDate) {
 		if (startDate == null || endDate == null || startDate == "" || endDate == "") {
-			System.out.println("Dates are null");
+			log.info("Dates are null");
 			return new ResponseEntity<List<Stock>>(HttpStatus.BAD_REQUEST);
 		}
 		try {
 			stockService.getAllStocks().stream().forEach(e -> {
-				System.out.println("Stock Date for (" + e.getCompanyName() + " is " + e.getStockDate() + ")");
+				log.info("Stock Date for (" + e.getCompanyName() + " is " + e.getStockDate() + ")");
 			});
 
-			System.out.println("Path variables -> " + startDate + " to " + endDate);
+			log.info("Path variables -> " + startDate + " to " + endDate);
 
 			List<Stock> resultStock = stockService.dateFilteredStocks(startDate, endDate);
-			System.out.println(
-					"Spring :: found stocks from " + startDate + " to " + endDate + " are " + resultStock.size());
+			
+			log.info("Spring :: found stocks from " + startDate + " to " + endDate + " are " + resultStock.size());
 
 			return new ResponseEntity<List<Stock>>(resultStock, HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		return new ResponseEntity<List<Stock>>(HttpStatus.BAD_GATEWAY);
 	}
@@ -123,7 +129,7 @@ public class StockController {
 
 		List<String> companyNames = stocks.stream().map(s -> s.getCompanyName()).distinct()
 				.collect(Collectors.toList());
-		System.out.println("Company Names list " + companyNames);
+		log.info("Company Names list " + companyNames);
 
 		List<AggregateStocks> aggregatedStocks = new ArrayList<AggregateStocks>();
 
@@ -132,9 +138,9 @@ public class StockController {
 			List<Float> pricingList = stocks.stream().filter(s -> s.getCompanyName().equals(companyName))
 					.map(p -> p.getStockPrice()).collect(Collectors.toList());
 
-			System.out.println("Pricing List is " + pricingList);
+			log.info("Pricing List is " + pricingList);
 			pricingList.forEach(s -> {
-				System.out.println("Prices " + s);
+				log.info("Prices " + s);
 			});
 
 			float min = pricingList.stream().min(Comparator.comparing(Float::valueOf)).get();
