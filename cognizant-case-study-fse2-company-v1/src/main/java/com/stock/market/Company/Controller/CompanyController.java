@@ -4,19 +4,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stock.market.Company.Model.Company;
 import com.stock.market.Company.Service.CompanyService;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
+@Slf4j
 public class CompanyController {
 
     @Autowired
@@ -24,47 +28,44 @@ public class CompanyController {
     
     @Autowired
     private ObjectMapper mapper;
-    
-    @Autowired
-    private KafkaTemplate<String, String> kakfaTemplate;
+//    
+//    @Autowired
+//    private KafkaTemplate<String, String> kakfaTemplate;
 
+    public int returnMaxId() {
+		List<Company> companyList = companyService.getAllCompanies();
+		if (companyList.size() == 0) {
+			return 0;
+		}
+		int maxId = companyService.getAllCompanies()
+    			.stream()
+                .max(Comparator.comparing(Company::getCompanyId))
+                .get()
+                .getCompanyId();		
+		return maxId;
+	}
     @PostMapping("/company/register")
     public ResponseEntity<Company> addCompany(@RequestBody Company company) throws JsonProcessingException 
     {
     	UUID randomUUID = UUID.randomUUID();
-
-    	int maxId = companyService.getAllCompanies()
-    			.stream()
-                .max(Comparator.comparing(Company::getCompanyId))
-                .get()
-                .getCompanyId();
     	
-    	if(maxId==0)
-    	{ 	
-    		company.setCompanyId(1);
+    	try {
+			company.setCompanyId(returnMaxId() + 1);
         	company.setCompanyCode(randomUUID);   
-        	Company addnewCompany = companyService.addCompany(company);
-            System.out.println("Company added "+ mapper.writeValueAsString(addnewCompany));
-            kakfaTemplate.send("fse_company", "***Adding First Company***");
-            kakfaTemplate.send("fse_company", mapper.writeValueAsString(addnewCompany));
-            return new ResponseEntity<>(addnewCompany, HttpStatus.OK); 
-    	}
-    	else {
-        	company.setCompanyId(maxId+1);
-        	company.setCompanyCode(randomUUID);   
-        	Company addotherCompany = companyService.addCompany(company);
-        	System.out.println("Company added "+ mapper.writeValueAsString(addotherCompany));
-        	kakfaTemplate.send("fse_company", "***Adding Company*** -> "+company.getCompanyName());
-            kakfaTemplate.send("fse_company", mapper.writeValueAsString(addotherCompany));
-            return new ResponseEntity<>(addotherCompany, HttpStatus.OK);
-    	}
+			log.info("Save the company from Spring Boot - " + company);
+			companyService.addCompany(company);
+		} catch (Exception e) {
+			log.error("Exception while saving company, "+e);
+		}
+        return new ResponseEntity<>(company, HttpStatus.OK); 
+		
     }
     
     @DeleteMapping("/company/delete/{id}")
     public String deleteCompany(@PathVariable int id) throws JsonProcessingException{
         companyService.deleteCompany(id);
-        kakfaTemplate.send("fse_company", "***Deleted Company***");
-        kakfaTemplate.send("fse_company", mapper.writeValueAsString(id));
+//        kakfaTemplate.send("fse_company", "***Deleted Company***");
+//        kakfaTemplate.send("fse_company", mapper.writeValueAsString(id));
         return "Company with id - "+id+" deleted";
     }
 
@@ -77,7 +78,8 @@ public class CompanyController {
     public List<Company> getAllCompanies()
     {
         List<Company> companies = companyService.getAllCompanies();
-        companies.forEach(System.out::println);
+        log.info("Total Companies, "+companies.stream().count() +
+        		", names -> " + companies.stream().map(s->s.getCompanyName()).collect(Collectors.toList()));
         return companies;
     }
 }

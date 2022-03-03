@@ -48,8 +48,8 @@ public class StockController {
 	@Autowired
 	private ObjectMapper mapper;
 
-	@Autowired
-	private KafkaTemplate<String, String> kafkaTemplate;
+//	@Autowired
+//	private KafkaTemplate<String, String> kafkaTemplate;
 
 	@PostMapping(value = "/stock/register")
 	public ResponseEntity<Stock> addStock(@RequestBody Stock stock) throws JsonProcessingException {
@@ -62,7 +62,7 @@ public class StockController {
 		Stock addOtherStock = stockService.addStock(stock);
 		log.info("Company added " + addOtherStock);
 		
-		kafkaTemplate.send("fse_stock", " Added Stock -> "+addOtherStock);
+//		kafkaTemplate.send("fse_stock", " Added Stock -> "+addOtherStock);
 		
 		return new ResponseEntity<>(addOtherStock, HttpStatus.OK);
 
@@ -214,10 +214,10 @@ public class StockController {
 					AggregateStocks.class);
 			List<AggregateStocks> aggregatedStocks = groupResults.getMappedResults();
 			String aggregatedStockString = mapper.writeValueAsString(aggregatedStocks);
-			kafkaTemplate.send("fse_stock", aggregatedStockString);
+//			kafkaTemplate.send("fse_stock", aggregatedStockString);
 			return aggregatedStocks;
 		} catch (Exception e) {
-			kafkaTemplate.send("fse_stock", e.getMessage());
+//			kafkaTemplate.send("fse_stock", e.getMessage());
 			return new ArrayList<>();
 		}
 	}
