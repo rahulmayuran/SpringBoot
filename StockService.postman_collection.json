@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "79e3df85-c428-4eca-8716-2f5d189ce4e3",
+		"_postman_id": "eeae18d6-a931-4406-9d4e-6c01e6f52767",
 		"name": "StockService",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"stockId\" : 2,\r\n    \"avgStockPrice\" : \"42.22f\",\r\n    \"minStockPrice\" : \"40.53f\",\r\n    \"maxStockPrice\" : \"45.11f\",\r\n    \"startDate\" : \"2021-12-30\",\r\n    \"endDate\" : \"2021-12-30\"\r\n}",
+					"raw": "{\r\n    \"stockPrice\" : \"42.22f\",\r\n    \"companyName\" : \"Tata Motors\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,7 +20,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:9051/api/register",
+					"raw": "http://localhost:9051/api/stock/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -28,6 +28,7 @@
 					"port": "9051",
 					"path": [
 						"api",
+						"stock",
 						"register"
 					]
 				}
@@ -60,7 +61,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:9051/api/getStock/1",
+					"raw": "http://localhost:9051/api/getStock/89b2bc37-a2cd-44e3-bd73-bf944d1c8225",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -69,19 +70,84 @@
 					"path": [
 						"api",
 						"getStock",
-						"1"
+						"89b2bc37-a2cd-44e3-bd73-bf944d1c8225"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Fetch stock by id Copy",
+			"name": "Fetch stock by Dates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9051/api/stock/search/2022-01-25/2022-01-25",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9051",
+					"path": [
+						"api",
+						"stock",
+						"search",
+						"2022-01-25",
+						"2022-01-25"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch stock by Prices",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9051/api/getStocks/price",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9051",
+					"path": [
+						"api",
+						"getStocks",
+						"price"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch stock by Prices Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9051/api/getStocks/aggregation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9051",
+					"path": [
+						"api",
+						"getStocks",
+						"aggregation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Stock by Id",
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:9051/api/delete/2",
+					"raw": "http://localhost:9051/api/delete/222",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -90,7 +156,30 @@
 					"path": [
 						"api",
 						"delete",
-						"2"
+						"222"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Azure cloud - Get all stocks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://stockservice.westus.azurecontainer.io:9051/api/getStocks",
+					"protocol": "http",
+					"host": [
+						"stockservice",
+						"westus",
+						"azurecontainer",
+						"io"
+					],
+					"port": "9051",
+					"path": [
+						"api",
+						"getStocks"
 					]
 				}
 			},
