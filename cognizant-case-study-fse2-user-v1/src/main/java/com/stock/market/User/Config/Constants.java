@@ -1,4 +1,4 @@
-package com.stock.market.Config;
+package com.stock.market.User.Config;
 
 public class Constants {
 
