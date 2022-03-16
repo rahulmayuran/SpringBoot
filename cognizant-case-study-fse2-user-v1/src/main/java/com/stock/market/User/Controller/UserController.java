@@ -1,6 +1,6 @@
 package com.stock.market.User.Controller;
 
-import com.stock.marker.Config.Constants;
+import com.stock.market.Config.Constants;
 import com.stock.market.User.Exception.UserException;
 import com.stock.market.User.Model.User;
 import com.stock.market.User.Service.UserService;

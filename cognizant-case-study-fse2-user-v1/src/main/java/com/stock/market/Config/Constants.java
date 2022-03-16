@@ -1,4 +1,4 @@
-package com.stock.marker.Config;
+package com.stock.market.Config;
 
 public class Constants {
 
