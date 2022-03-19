@@ -28,7 +28,11 @@ public class UserController {
 		if (allUsers.size() == 0) {
 			return 0;
 		}
-		int maxId = allUsers.stream().max(Comparator.comparing(User::getUserId)).get().getUserId();
+		int maxId = allUsers.stream()
+				.max(Comparator.comparing(User::getUserId))
+				.get()
+				.getUserId();
+		log.info("Max Id is " + maxId);
 		return maxId;
 	}
 
@@ -40,7 +44,7 @@ public class UserController {
 			user.setRole(Constants.USER);
 			log.info("Save the user from Spring Boot - " + user);
 		} catch (Exception e) {
-			log.error("Exception saving user "+e);
+			log.error("Exception while saving user "+e.getMessage());
 		}
 		return userService.saveUser(user);
 
@@ -57,7 +61,7 @@ public class UserController {
 	public Optional<User> getUserById(@PathVariable int id) throws UserException {
 
 		Optional<User> singleUser = userService.getUserById(id);
-		log.info("Fetched single user, " + singleUser);
+		log.info("Fetched single user with id, "+id+" ,value = "+ singleUser);
 		return singleUser;
 	}
 
@@ -65,13 +69,14 @@ public class UserController {
 	public Optional<User> getUserByName(@PathVariable String name) throws UserException {
 
 		Optional<User> singleUser = userService.getUserByName(name);
-		log.info("Fetched single user, " + singleUser);
+		log.info("Fetched single user with name, "+name+", value = " + singleUser);
 		return singleUser;
 	}
 
 	@DeleteMapping("/getUser/{id}")
 	public Optional<User> deleteSingleUser(@PathVariable int id) throws UserException {
 
+		log.info("About to Delete the user");
 		Optional<User> deleteSingleUser = userService.getUserById(id);
 		log.info("Deleted user with id, " + id);
 		return deleteSingleUser;
