@@ -9,8 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class CustomMessage 
-{
+public class CustomMessage {
     private int status;
     private String errorMessage;
 

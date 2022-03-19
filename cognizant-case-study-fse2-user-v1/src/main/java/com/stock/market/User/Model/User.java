@@ -23,16 +23,16 @@ public class User {
     @Id
     @JsonProperty("userId")
     private int userId;
-    
+
     @JsonProperty("emailId")
     private String emailId;
-    
+
     @JsonProperty("username")
     private String username;
-    
+
     @JsonProperty("password")
     private String password;
-    
+
     @JsonProperty("role")
     private String role;
 }
