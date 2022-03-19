@@ -1,0 +1,3 @@
+...
+log.info Fetching 5 users
+log.debug Fetched Stocks from cosmos db
