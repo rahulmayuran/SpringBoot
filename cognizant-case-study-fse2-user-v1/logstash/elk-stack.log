@@ -1,0 +1,20 @@
+2022-03-20 13:10:35.560  INFO 808 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_COGNIZANT-CASE-STUDY-FSE2-USER-V1/host.docker.internal:cognizant-case-study-fse2-user-v1:9052: registering service...
+2022-03-20 13:10:35.694  INFO 808 --- [  restartedMain] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.0.0
+2022-03-20 13:10:35.694  INFO 808 --- [  restartedMain] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 8cb0a5e9d3441962
+2022-03-20 13:10:35.694  INFO 808 --- [  restartedMain] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1647762035694
+2022-03-20 13:10:35.696  INFO 808 --- [  restartedMain] o.a.k.clients.consumer.KafkaConsumer     : [Consumer clientId=consumer-userGroup-1, groupId=userGroup] Subscribed to topic(s): fse_user
+2022-03-20 13:10:35.721  INFO 808 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_COGNIZANT-CASE-STUDY-FSE2-USER-V1/host.docker.internal:cognizant-case-study-fse2-user-v1:9052 - registration status: 204
+2022-03-20 13:10:35.754  INFO 808 --- [ntainer#0-0-C-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-userGroup-1, groupId=userGroup] Cluster ID: GcRO4BUUSsCYH_uW42PEZg
+2022-03-20 13:10:35.758  INFO 808 --- [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-userGroup-1, groupId=userGroup] Discovered group coordinator host.docker.internal:9092 (id: 2147483647 rack: null)
+2022-03-20 13:10:35.761  INFO 808 --- [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-userGroup-1, groupId=userGroup] (Re-)joining group
+2022-03-20 13:10:35.774  INFO 808 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9052 (http) with context path ''
+2022-03-20 13:10:35.776  INFO 808 --- [  restartedMain] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 9052
+2022-03-20 13:10:35.783  INFO 808 --- [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-userGroup-1, groupId=userGroup] Request joining group due to: need to re-join with the given member-id
+2022-03-20 13:10:35.784  INFO 808 --- [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-userGroup-1, groupId=userGroup] (Re-)joining group
+2022-03-20 13:10:35.990  INFO 808 --- [  restartedMain] com.stock.market.User.UserApplication    : Started UserApplication in 11.012 seconds (JVM running for 12.698)
+2022-03-20 13:10:35.999  INFO 808 --- [  restartedMain] com.stock.market.User.UserApplication    : Profiles Active : In Dev Environment!, Happy coding!
+2022-03-20 13:10:38.855  INFO 808 --- [nio-9052-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-03-20 13:10:38.855  INFO 808 --- [nio-9052-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-03-20 13:10:38.858  INFO 808 --- [nio-9052-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2022-03-20 13:10:40.161  INFO 808 --- [nio-9052-exec-1] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:7, serverValue:430124}] to cluster0-shard-00-02.fi5wg.mongodb.net:27017
+2022-03-20 13:10:40.485  INFO 808 --- [nio-9052-exec-1] c.s.m.User.Controller.UserController     : Total list of users, [User(userId=1, emailId=fredninja@gmail.com, username=fredrick, password=freddy, role=USER), User(userId=2, emailId=rahul@google.com, username=rahul, password=rahul, role=ADMIN), User(userId=3, emailId=krupa@gmail.com, username=krupa, password=krupa, role=USER), User(userId=4, emailId=harshi@.yahoo.in, username=harshi, password=harshi, role=USER), User(userId=5, emailId=pandit@gmail.com, username=pandit, password=pandit, role=USER)]

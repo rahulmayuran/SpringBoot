@@ -1,4 +1,3 @@
-/*
 package com.stock.market.User.Config;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,4 +41,3 @@ public class KafkaProducer {
 
 }
 
-*/

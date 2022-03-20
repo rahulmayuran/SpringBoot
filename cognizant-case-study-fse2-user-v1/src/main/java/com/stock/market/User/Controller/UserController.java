@@ -1,21 +1,24 @@
 package com.stock.market.User.Controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stock.market.User.Config.Constants;
 import com.stock.market.User.Exception.UserException;
 import com.stock.market.User.Model.User;
 import com.stock.market.User.Service.UserService;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1.0/user")
@@ -28,6 +31,11 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @PostMapping("/register")
     public User saveUser(@RequestBody User user) {
@@ -44,9 +52,14 @@ public class UserController {
     }
 
     @GetMapping("/getUsers")
-    public List<User> names() {
+    public List<User> names() throws JsonProcessingException {
         List<User> users = userService.getAllUsers();
         log.info("Total list of users, " + users);
+        kafkaTemplate.send("fse_user",
+                mapper.writeValueAsString(users.stream()
+                        .map(u->u.getUsername())
+                        .collect(Collectors.toList())
+                ));
         return users;
     }
 
