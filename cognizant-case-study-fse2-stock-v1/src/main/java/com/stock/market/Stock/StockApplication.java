@@ -1,5 +1,6 @@
 package com.stock.market.Stock;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -14,4 +15,6 @@ public class StockApplication {
 		SpringApplication.run(StockApplication.class, args);
 	}
 
+	@Value(value = "${environment}")
+	String key;
 }

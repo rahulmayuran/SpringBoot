@@ -80,6 +80,15 @@ public class UserController {
         return singleUser;
     }
 
+    @PutMapping("/getUsername/{name}")
+    public Optional<User> changeRoleToAdmin(@PathVariable String name) throws UserException {
+
+        Optional<User> singleUser = userService.getUserByName(name);
+        log.info("Fetched single user with name, " + name + ", value = " + singleUser);
+        singleUser.ifPresent(u->u.setRole(Constants.ADMIN));
+        return singleUser;
+    }
+
     @DeleteMapping("/getUser/{id}")
     public Optional<User> deleteSingleUser(@PathVariable int id) throws UserException {
 

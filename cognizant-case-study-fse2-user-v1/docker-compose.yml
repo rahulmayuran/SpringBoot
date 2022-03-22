@@ -20,8 +20,8 @@ services:
     container_name: logstash
     restart: always
     volumes:
-      - ./logstash/:/pipeline/
-    command: logstash -f ./pipeline/logstash.conf
+      - ./logstash/:/logstash_dir
+    command: logstash -f /logstash_dir/logstash-kafka.conf
     depends_on:
       - Elasticsearch
     ports:

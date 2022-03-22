@@ -1,5 +1,6 @@
 package com.stock.market.User;
 
+import com.stock.market.User.Config.Timer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -21,6 +22,8 @@ public class UserApplication implements CommandLineRunner {
 
     public static void main(String[] args) throws InterruptedException{
         SpringApplication.run(UserApplication.class, args);
+        Timer timer = new Timer();
+        timer.log();
     }
 
     @Override

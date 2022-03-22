@@ -44,11 +44,15 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		<!--springfox dependencies for api documentations in swagger -->
-      	<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>3.0.0</version>
+		<!--log42j.xml dependency-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-log4j-appender</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 		<!--  Kafka dependency> -->
 		<dependency>

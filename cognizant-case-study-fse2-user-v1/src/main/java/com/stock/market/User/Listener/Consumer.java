@@ -1,10 +1,10 @@
+/*
 package com.stock.market.User.Listener;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
 @Configuration
-public class KafkaConsumer
+public class Consumer
 {
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
@@ -41,5 +41,5 @@ public class KafkaConsumer
 		factory.setConsumerFactory(consumerFactory);
 		return factory;
 	}
-
 }
+*/

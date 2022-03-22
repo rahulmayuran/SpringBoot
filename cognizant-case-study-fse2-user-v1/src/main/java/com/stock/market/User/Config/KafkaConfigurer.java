@@ -1,3 +1,4 @@
+/*
 package com.stock.market.User.Config;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
@@ -14,3 +15,4 @@ public class KafkaConfigurer {
 		return TopicBuilder.name("fse_user").build();
 	}
 }
+*/
