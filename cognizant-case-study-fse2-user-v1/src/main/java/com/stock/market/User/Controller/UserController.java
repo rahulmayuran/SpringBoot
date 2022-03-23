@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserController {
 
-    private static final Logger logger = LogManager.getLogger();
-
     @Autowired
     UserService userService;
 
@@ -44,8 +42,10 @@ public class UserController {
             user.setUserId(returnMaxId() + 1);
             user.setRole(Constants.USER);
             log.info("Save the user from Spring Boot - " + user);
+            kafkaTemplate.send("fse_user", mapper.writeValueAsString("Adding this user -> "+ user));
         } catch (Exception e) {
             log.error("Exception while saving user " + e.getMessage());
+            kafkaTemplate.send("fse_user", e.getMessage());
         }
         return userService.saveUser(user);
 
@@ -56,7 +56,7 @@ public class UserController {
         List<User> users = userService.getAllUsers();
         log.info("Total list of users, " + users);
         kafkaTemplate.send("fse_user",
-                mapper.writeValueAsString(users.stream()
+                mapper.writeValueAsString("List of users -> "+users.stream()
                         .map(u->u.getUsername())
                         .collect(Collectors.toList())
                 ));
@@ -64,18 +64,19 @@ public class UserController {
     }
 
     @GetMapping("/getUser/{id}")
-    public Optional<User> getUserById(@PathVariable int id) throws UserException {
+    public Optional<User> getUserById(@PathVariable int id) throws UserException,JsonProcessingException {
 
         Optional<User> singleUser = userService.getUserById(id);
+        kafkaTemplate.send("fse_user", mapper.writeValueAsString("Fetched single user with id, " + id + " ,value = " + singleUser));
         log.info("Fetched single user with id, " + id + " ,value = " + singleUser);
-        logger.info("Fetched single user with id, " + id + " ,value = " + singleUser);
         return singleUser;
     }
 
     @GetMapping("/getUsername/{name}")
-    public Optional<User> getUserByName(@PathVariable String name) throws UserException {
+    public Optional<User> getUserByName(@PathVariable String name) throws UserException,JsonProcessingException {
 
         Optional<User> singleUser = userService.getUserByName(name);
+        kafkaTemplate.send("fse_user", mapper.writeValueAsString("Fetched single user with name, " + name + ", value = " + singleUser));
         log.info("Fetched single user with name, " + name + ", value = " + singleUser);
         return singleUser;
     }
@@ -90,11 +91,14 @@ public class UserController {
     }
 
     @DeleteMapping("/getUser/{id}")
-    public Optional<User> deleteSingleUser(@PathVariable int id) throws UserException {
+    public Optional<User> deleteSingleUser(@PathVariable int id) throws UserException,JsonProcessingException {
 
         log.info("About to Delete the user");
+        kafkaTemplate.send("fse_user", "About to Delete the user");
         Optional<User> deleteSingleUser = userService.getUserById(id);
+        kafkaTemplate.send("fse_user", mapper.writeValueAsString("Deleted user with id, " + id));
         log.info("Deleted user with id, " + id);
+        userService.deleteuser(id);
         return deleteSingleUser;
     }
 
