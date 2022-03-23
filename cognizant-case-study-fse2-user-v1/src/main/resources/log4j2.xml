@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="info" name="spring-boot-kafka-log" packages="com.stock.market">
     <Appenders>
-        <Kafka name="Kafka" topic="fse-user">
+        <Kafka name="Kafka" topic="fse_user">
             <PatternLayout pattern="%date %message"/>
             <Property name="bootstrap.servers">localhost:9092</Property>
         </Kafka>

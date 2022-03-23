@@ -1,4 +1,3 @@
-/*
 package com.stock.market.User.Listener;
 
 import java.util.HashMap;
@@ -42,4 +41,3 @@ public class Consumer
 		return factory;
 	}
 }
-*/
