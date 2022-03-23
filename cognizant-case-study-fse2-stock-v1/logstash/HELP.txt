@@ -1,0 +1,11 @@
+1. Download Kibana, Logstash and ES version 7.6.2
+2. Download Zookeeper 3.4.10 and kafka 2.12-2.4.1
+3. Place the logstash-kafka.conf under logstash/bin
+
+4. Run zookeeper with zkServer.cmd
+5. Run kafka with .\bin\windows\kakfa-server-start.bat .\config\server.properties
+6. Run logstash with logstash -f logstash-stock.conf
+7. Run elasticsearch
+8. Run kibana
+
+Application should send messages to kafkaTemplate -> Logstash -> ElasticSearch -> Kibana
