@@ -121,7 +121,7 @@
 			"response": []
 		},
 		{
-			"name": "Fetch stock by Prices Copy",
+			"name": "Fetch stock by Aggregation",
 			"request": {
 				"method": "GET",
 				"header": [],

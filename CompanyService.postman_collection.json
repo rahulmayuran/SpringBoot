@@ -61,7 +61,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:9053/api/getCompany/1",
+					"raw": "http://localhost:9053/api/getCompany/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -70,7 +70,7 @@
 					"path": [
 						"api",
 						"getCompany",
-						"1"
+						"3"
 					]
 				}
 			},
