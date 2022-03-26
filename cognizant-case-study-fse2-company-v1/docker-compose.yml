@@ -1,0 +1,76 @@
+version: '3.6'
+services:
+  zookeeper:
+    image: zookeeper
+    container_name: ZOOKEEPER
+    expose:
+      - "2181"
+    networks:
+      - elk
+
+  kafka:
+    image: wurstmeister/kafka:2.12-2.4.1
+    container_name: KAFKA
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    expose:
+      - "9093"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: STOCK://kafka:9093, PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: STOCK:PLAINTEXT, PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: STOCK://0.0.0.0:9093,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: STOCK
+      KAFKA_CREATE_TOPIC: "fse_stock"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - elk
+#  Elasticsearch:
+#    image: elasticsearch:7.6.2
+#    container_name: ELASTICSEARCH
+#    restart: always
+#    volumes:
+#      - elastic_data:/usr/share/elasticsearch/data/
+#    environment:
+#      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+#      discovery.type: single-node
+#    ports:
+#      - '9200:9200'
+#      - '9300:9300'
+#    networks:
+#      - elk
+#  Logstash:
+#    image: logstash:7.6.2
+#    container_name: LOGSTASH
+#    restart: always
+#    volumes:
+#      - ./logstash/:/logstash_dir
+#    command: logstash -f /logstash_dir/logstash-kafka.conf
+#    depends_on:
+#      - Elasticsearch
+#    links:
+#      - Kafka
+#    ports:
+#      - '9600:9600'
+#    environment:
+#      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+#    networks:
+#      - elk
+#  Kibana:
+#    image: kibana:7.6.2
+#    container_name: KIBANA
+#    restart: always
+#    ports:
+#      - '5601:5601'
+#    environment:
+#      - ELASTICSEARCH_URL=http://elasticsearch:9200
+#    depends_on:
+#      - Elasticsearch
+#    networks:
+#      - elk
+#volumes:
+#  elastic_data: {}
+networks:
+  elk:
