@@ -1,80 +1,73 @@
 version: '3.6'
 services:
   zookeeper:
-    image: strimzi/kafka:0.11.3-kafka-2.1.0
-    container_name: zookeeper
-    command: [
-      "sh", "-c",
-      "bin/zookeeper-server-start.sh config/zookeeper.properties"
-    ]
-    ports:
-      - "2181:2181"
-    networks:
-      - elk
-    environment:
-      LOG_DIR: /tmp/logs
-  Kafka:
-    image: strimzi/kafka:0.11.3-kafka-2.1.0
-    command: [
-      "sh", "-c",
-      "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
-    ]
+    image: wurstmeister/zookeeper:3.4.6
+    expose:
+      - "2181"
+
+  kafka:
+    image: wurstmeister/kafka:2.11-2.0.0
     depends_on:
       - zookeeper
     ports:
       - "9092:9092"
-    networks:
-      - elk
     environment:
-      LOG_DIR: "/tmp/logs"
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-  Elasticsearch:
-    image: elasticsearch:7.6.2
-    container_name: elasticsearch
+#  Elasticsearch:
+#    image: elasticsearch:7.6.2
+#    container_name: elasticsearch
+#    restart: always
+#    volumes:
+#      - elastic_data:/usr/share/elasticsearch/data/
+#    environment:
+#      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+#      discovery.type: single-node
+#    ports:
+#      - '9200:9200'
+#      - '9300:9300'
+#    networks:
+#      - elk
+#  Logstash:
+#    image: logstash:7.6.2
+#    container_name: logstash
+#    restart: always
+#    volumes:
+#      - ./logstash/:/logstash_dir
+#    command: logstash -f /logstash_dir/logstash-kafka.conf
+#    depends_on:
+#      - Elasticsearch
+#    links:
+#      - Kafka
+#    ports:
+#      - '9600:9600'
+#    environment:
+#      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+#    networks:
+#      - elk
+#  Kibana:
+#    image: kibana:7.6.2
+#    container_name: kibana
+#    restart: always
+#    ports:
+#      - '5601:5601'
+#    environment:
+#      - ELASTICSEARCH_URL=http://elasticsearch:9200
+#    depends_on:
+#      - Elasticsearch
+#    networks:
+#      - elk
+#volumes:
+#  elastic_data: {}
+  UserApplication:
+    image: fsestockmarketregistry.azurecr.io/userrepository:kafka-dev
+    container_name: UserContainer
     restart: always
-    volumes:
-      - elastic_data:/usr/share/elasticsearch/data/
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      discovery.type: single-node
     ports:
-      - '9200:9200'
-      - '9300:9300'
+      - '9052:9052'
+      - '443:443'
     networks:
       - elk
-  Logstash:
-    image: logstash:7.6.2
-    container_name: logstash
-    restart: always
-    volumes:
-      - ./logstash/:/logstash_dir
-    command: logstash -f /logstash_dir/logstash-kafka.conf
-    depends_on:
-      - Elasticsearch
-    links:
-      - Kafka
-    ports:
-      - '9600:9600'
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    networks:
-      - elk
-  Kibana:
-    image: kibana:7.6.2
-    container_name: kibana
-    restart: always
-    ports:
-      - '5601:5601'
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-    depends_on:
-      - Elasticsearch
-    networks:
-      - elk
-volumes:
-  elastic_data: {}
-
 networks:
   elk:

@@ -1,4 +1,4 @@
-package com.fsestockelk;
+package com.stock.market.User.Functions;
 
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpMethod;
@@ -20,7 +20,7 @@ public class Function {
      * 1. curl -d "HTTP Body" {your host}/api/HttpExample
      * 2. curl "{your host}/api/HttpExample?name=HTTP%20Query"
      */
-    @FunctionName("HttpExample")
+    @FunctionName("UserFunction")
     public HttpResponseMessage run(
             @HttpTrigger(
                 name = "req",
@@ -35,9 +35,13 @@ public class Function {
         final String name = request.getBody().orElse(query);
 
         if (name == null) {
-            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Please pass a name on the query string or in the request body").build();
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                    .body("Please pass a name on the query string or in the request body")
+                    .build();
         } else {
-            return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name).build();
+            return request.createResponseBuilder(HttpStatus.OK)
+                    .body("Hello, " + name)
+                    .build();
         }
     }
 }
