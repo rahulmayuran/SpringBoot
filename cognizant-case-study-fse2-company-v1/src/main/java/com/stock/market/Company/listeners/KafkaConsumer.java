@@ -16,7 +16,6 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
 @Configuration
-@Profile("dev")
 public class KafkaConsumer
 {
 	@Value("${spring.kafka.bootstrap-servers}")

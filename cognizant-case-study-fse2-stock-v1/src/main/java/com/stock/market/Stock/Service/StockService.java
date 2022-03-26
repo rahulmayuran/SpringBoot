@@ -21,12 +21,13 @@ public class StockService {
     @Autowired
     StockRepository stockRepository;
     
-//    @Autowired
-//    KafkaTemplate<String, String> kafkaTemplate;
-    
-    @Bean
-    public void TestingKafkaMessages() {
-//    	kafkaTemplate.send("fse_stock", "Inside Stock Service ~ " + Uuid.randomUuid());
+    @Autowired
+    KafkaTemplate<String, String> kafkaTemplate;
+
+    private static final String TOPIC = "fse_stock";
+
+    public void pushToTopic(String message) {
+    	kafkaTemplate.send(TOPIC, message);
     }
 
     public Stock addStock(Stock stock) {

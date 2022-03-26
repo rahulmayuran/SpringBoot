@@ -6,7 +6,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("dev")
 public class KafkaListeners {
 
 	@KafkaListener(topics = {"fse_company"}, groupId = "companyGroup")

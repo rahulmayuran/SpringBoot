@@ -34,9 +34,6 @@ public class StockController {
 	@Autowired
 	private ObjectMapper mapper;
 
-	@Autowired
-	private KafkaTemplate<String, String> kafkaTemplate;
-
 	@PostMapping(value = "/stock/register")
 
 	public ResponseEntity<Stock> addStock(@RequestBody Stock stock) throws JsonProcessingException {
@@ -49,24 +46,23 @@ public class StockController {
 		Stock addOtherStock = stockService.addStock(stock);
 		log.info("Company added " + addOtherStock);
 		
-		kafkaTemplate.send("fse_stock", mapper.writeValueAsString(" Added Stock -> "+addOtherStock));
+		stockService.pushToTopic(mapper.writeValueAsString(" Added Stock -> "+addOtherStock));
 		
 		return new ResponseEntity<>(addOtherStock, HttpStatus.OK);
 
 	}
 
-	@SuppressWarnings("static-access")
 	@DeleteMapping(value = "stock/delete/{id}")
 	public ResponseEntity<String> deleteStock(@PathVariable String id) {
 		ResponseEntity<String> response = new ResponseEntity<String>(HttpStatus.OK);
 		try {
 			stockService.deleteStock(id);
 			response.ok("Deleted Stock with id" + id).status(HttpStatus.OK);
-			kafkaTemplate.send("fse_stock", mapper.writeValueAsString("Deleted Stock with id" + id));
+			stockService.pushToTopic(mapper.writeValueAsString("Deleted Stock with id" + id));
 		} 
 		catch (Exception e) {
 			response.status(HttpStatus.BAD_REQUEST).body("Exception occured while deleting " + e);
-			kafkaTemplate.send("fse_stock", "Exception while deleting, "+e.getMessage());
+			stockService.pushToTopic("Exception while deleting, "+e.getMessage());
 		}
 		return response.badRequest().body("Id doesn't exist");
 	}
@@ -74,7 +70,7 @@ public class StockController {
 	@GetMapping(value = "getStock/{id}")
 	public ResponseEntity<Stock> getStockById(@PathVariable String id) throws JsonProcessingException{
 		Optional<Stock> stock = stockService.getStockById(id);
-		kafkaTemplate.send("fse_stock", mapper.writeValueAsString("Fetched stock with id, "+id+" -> "+stock));
+		stockService.pushToTopic(mapper.writeValueAsString("Fetched stock with id, "+id+" -> "+stock));
 		return ResponseEntity.of(stock);
 	}
 
@@ -84,7 +80,7 @@ public class StockController {
 		if (stocks.size() == 0) {
 			return new ResponseEntity<List<Stock>>(HttpStatus.NOT_FOUND);
 		}
-		kafkaTemplate.send("fse_stock", mapper.writeValueAsString("Fetched all stocks, ->" + stocks));
+		stockService.pushToTopic(mapper.writeValueAsString("Fetched all stocks, ->" + stocks));
 		return new ResponseEntity<List<Stock>>(stocks, HttpStatus.OK);
 
 	}
@@ -93,14 +89,14 @@ public class StockController {
 	public ResponseEntity<List<Stock>> dateBasedStocks(@PathVariable String startDate, @PathVariable String endDate) throws JsonProcessingException {
 		if (startDate == null || endDate == null || startDate == "" || endDate == "") {
 			log.info("Dates are null");
-			kafkaTemplate.send("fse_stock", "Dates are null");
+			stockService.pushToTopic("Dates are null");
 			return new ResponseEntity<List<Stock>>(HttpStatus.BAD_REQUEST);
 		}
 		try {
 			stockService.getAllStocks().stream().forEach(e -> {
 				log.info("Stock Date for (" + e.getCompanyName() + " is " + e.getStockDate() + ")");
 				try {
-					kafkaTemplate.send("fse_stock", mapper.writeValueAsString("Stock Date for (" + e.getCompanyName() + " is " + e.getStockDate() + ")"));
+					stockService.pushToTopic(mapper.writeValueAsString("Stock Date for (" + e.getCompanyName() + " is " + e.getStockDate() + ")"));
 				} catch (JsonProcessingException e1) {
 					e1.printStackTrace();
 				}
@@ -112,12 +108,11 @@ public class StockController {
 			List<Stock> resultStock = stockService.dateFilteredStocks(startDate, endDate);
 			
 			log.info("Spring :: found stocks from " + startDate + " to " + endDate + " are " + resultStock.size());
-			kafkaTemplate.send("fse_stock",
-					mapper.writeValueAsString("Spring :: found stocks from " + startDate + " to " + endDate + " are " + resultStock.size()));
+			stockService.pushToTopic(mapper.writeValueAsString("Spring :: found stocks from " + startDate + " to " + endDate + " are " + resultStock.size()));
 			return new ResponseEntity<List<Stock>>(resultStock, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			kafkaTemplate.send("fse_stock", "No stocks as "+e.getMessage());
+			stockService.pushToTopic("No stocks as "+e.getMessage());
 		}
 		return new ResponseEntity<List<Stock>>(HttpStatus.BAD_GATEWAY);
 	}
@@ -163,7 +158,7 @@ public class StockController {
 		if (stocks.size() == 0) {
 			return new ResponseEntity<List<AggregateStocks>>(aggregatedStocks, HttpStatus.NOT_FOUND);
 		}
-		kafkaTemplate.send("fse_stock", mapper.writeValueAsString("Aggregated stocks as per prices "+aggregatedStocks));
+		stockService.pushToTopic(mapper.writeValueAsString("Aggregated stocks as per prices "+aggregatedStocks));
 		return new ResponseEntity<List<AggregateStocks>>(aggregatedStocks, HttpStatus.OK);
 	}
 
@@ -211,10 +206,10 @@ public class StockController {
 					AggregateStocks.class);
 			List<AggregateStocks> aggregatedStocks = groupResults.getMappedResults();
 			String aggregatedStockString = mapper.writeValueAsString(aggregatedStocks);
-			kafkaTemplate.send("fse_stock", aggregatedStockString);
+			stockService.pushToTopic(aggregatedStockString);
 			return aggregatedStocks;
 		} catch (Exception e) {
-			kafkaTemplate.send("fse_stock", e.getMessage());
+			stockService.pushToTopic(e.getMessage());
 			return new ArrayList<>();
 		}
 	}

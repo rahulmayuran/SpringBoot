@@ -1,91 +1,76 @@
-version: "3.3"
+version: '3.6'
 services:
   zookeeper:
     image: zookeeper
-    hostname: zookeeper
-    restart: always
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
+    container_name: ZOOKEEPER
     expose:
       - "2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOO_MY_ID: 1 
+    networks:
+      - elk
+
   kafka:
-    image: wurstmeister/kafka
-    container_name: kafka
-    restart: always
+    image: wurstmeister/kafka:2.12-2.4.1
+    container_name: KAFKA
     depends_on:
-      - zookeeper
-    links:
       - zookeeper
     ports:
       - "9092:9092"
+    expose:
+      - "9093"
     environment:
-      KAFKA_BROKER_ID: 0
+      KAFKA_ADVERTISED_LISTENERS: STOCK://kafka:9093, PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: STOCK:PLAINTEXT, PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: STOCK://0.0.0.0:9093,PLAINTEXT_HOST://0.0.0.0:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_INTER_BROKER_LISTENER_NAME: STOCK
+      KAFKA_CREATE_TOPIC: "fse_stock"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-  kafka-manager:
-    image: hlebalbau/kafka-manager:stable
-    container_name: kafka-manager
-    restart: unless-stopped
-    ports:
-      - "9000:9000"
-    environment:
-      APPLICATION_SECRET: "random-secret"
-      ZK_HOSTS: zookeeper:2181
-    command: -Dpidfile.path=/dev/null
-  logstash:
-    image: logstash:7.16.2
-    container_name: logstash
-    restart: always
-    volumes:
-      - "./logstash/:/logstash.dir"
-    command: logstash -f /logstash.dir/logstash.conf
-    ports:
-      - "9600:9600"
-      - "7777:7777"
-    links:
-      - elasticsearch
-      - kafka
-  elasticsearch:
-    image: elasticsearch:7.16.2
-    container_name: elasticsearch
-    restart: always
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-    environment:
-      - discovery.type=single-node
-#      - ELASTIC_PASSWORD=test
-#      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    cap_add:
-      - IPC_LOCK
-    mem_limit: 1g
-    ports:
-      - "9200:9200"
-  kibana:
-    image: kibana:7.16.2
-    container_name: kibana
-    restart: always
-    ports:
-      - "5601:5601"
-    links:
-      - elasticsearch
-    depends_on:
-      - elasticsearch
-volumes:
-  elasticsearch-data: {}
+    networks:
+      - elk
+#  Elasticsearch:
+#    image: elasticsearch:7.6.2
+#    container_name: ELASTICSEARCH
+#    restart: always
+#    volumes:
+#      - elastic_data:/usr/share/elasticsearch/data/
+#    environment:
+#      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+#      discovery.type: single-node
+#    ports:
+#      - '9200:9200'
+#      - '9300:9300'
+#    networks:
+#      - elk
+#  Logstash:
+#    image: logstash:7.6.2
+#    container_name: LOGSTASH
+#    restart: always
+#    volumes:
+#      - ./logstash/:/logstash_dir
+#    command: logstash -f /logstash_dir/logstash-kafka.conf
+#    depends_on:
+#      - Elasticsearch
+#    links:
+#      - Kafka
+#    ports:
+#      - '9600:9600'
+#    environment:
+#      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+#    networks:
+#      - elk
+#  Kibana:
+#    image: kibana:7.6.2
+#    container_name: KIBANA
+#    restart: always
+#    ports:
+#      - '5601:5601'
+#    environment:
+#      - ELASTICSEARCH_URL=http://elasticsearch:9200
+#    depends_on:
+#      - Elasticsearch
+#    networks:
+#      - elk
+#volumes:
+#  elastic_data: {}
+networks:
+  elk:
