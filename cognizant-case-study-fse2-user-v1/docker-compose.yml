@@ -60,14 +60,14 @@ services:
 #      - elk
 #volumes:
 #  elastic_data: {}
-  UserApplication:
-    image: fsestockmarketregistry.azurecr.io/userrepository:kafka-dev
-    container_name: UserContainer
-    restart: always
-    ports:
-      - '9052:9052'
-      - '443:443'
-    networks:
-      - elk
+#  UserApplication:
+#    image: fsestockmarketregistry.azurecr.io/userrepository:kafka-dev
+#    container_name: UserContainer
+#    restart: always
+#    ports:
+#      - '9052:9052'
+#      - '443:443'
+#    networks:
+#      - elk
 networks:
   elk:
