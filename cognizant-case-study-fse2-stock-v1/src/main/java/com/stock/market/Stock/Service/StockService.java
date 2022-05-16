@@ -20,14 +20,6 @@ public class StockService {
 
     @Autowired
     StockRepository stockRepository;
-    
-//    @Autowired
-//    KafkaTemplate<String, String> kafkaTemplate;
-    
-    @Bean
-    public void TestingKafkaMessages() {
-//    	kafkaTemplate.send("fse_stock", "Inside Stock Service ~ " + Uuid.randomUuid());
-    }
 
     public Stock addStock(Stock stock) {
         return stockRepository.save(stock);

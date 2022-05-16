@@ -28,9 +28,6 @@ public class CompanyController {
     
     @Autowired
     private ObjectMapper mapper;
-//    
-//    @Autowired
-//    private KafkaTemplate<String, String> kakfaTemplate;
 
     public int returnMaxId() {
 		List<Company> companyList = companyService.getAllCompanies();
