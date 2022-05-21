@@ -64,7 +64,7 @@ Zookeeper is used to track the status of Kafka messages and has the cluster info
 [2022-02-08 10:01:44,356] INFO Kafka startTimeMs: 1644294704316 (org.apache.kafka.common.utils.AppInfoParser)
 [2022-02-08 10:01:44,363] INFO [KafkaServer id=0] started (kafka.server.KafkaServer)`
 		
-- Define a ** @Configuration ** class with a @Bean method of NewTopic to create the topic fse_stock and run the microservice , add spring.kafka.bootstrap-servers=localhost:9092 to application-properties file. 
+- Define a **@Configuration** class with a @Bean method of NewTopic to create the topic fse_stock and run the microservice , add spring.kafka.bootstrap-servers=localhost:9092 to application-properties file. 
 
 `Creating topic fse_stock with configuration {} and initial partition assignment Map(0 -> ArrayBuffer(0)) (kafka.zk.AdminZkClient)
 [2022-02-08 21:33:57,283] INFO [ReplicaFetcherManager on broker 0] Removed fetcher for partitions Set(fse_stock-0) (kafka.server.ReplicaFetcherManager)
