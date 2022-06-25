@@ -1,0 +1,21 @@
+environment: In Dev Environment!, Happy coding!
+
+server:
+  port: 9052
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+
+application:
+  name: cognizant-case-study-fse2-user-v1
+
+data:
+  mongodb:
+    database: cogz-fse2-stockMarket
+    uri: mongodb+srv://rahul:LTU3pPLZlcPaGFnS@cluster0.lyaj9uk.mongodb.net/cogz-fse2-stockMarket?retryWrites=true&w=majority
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:9050/eureka/
