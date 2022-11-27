@@ -1,4 +1,4 @@
-package com.flight.app.Main;
+package com.flight.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 
-@EnableAutoConfiguration
 @SpringBootApplication
 @EnableEurekaClient
 public class FlightApplication{
