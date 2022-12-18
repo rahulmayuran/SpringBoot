@@ -3,11 +3,11 @@ All springBoot related projects
 
 # Mongo DB
 - Mongo DB compass has link to Atlas, https://cloud.mongodb.com/.
-- Created cluster in atlas after sign up in cognizant mail.
+- Created cluster in atlas after signing up.
     - Chosen shared Database in azure and region as **virginia**.
     - Created a project - **StockMarket**
-    - Under cluster > connect, Username is `user` and password is `pass`.
-    - Added this ip 49.204.139.46/32
+    - Under cluster > connect, Username is `user` and password is `xxxx`.
+    - Added my IP
     - Created DB and table from cluster and Added
 ```yaml
 spring.data.mongodb.uri=mongodb+srv://user:user@cluster0.fi5wg.mongodb.net/cogz-fse2-stockMarket
