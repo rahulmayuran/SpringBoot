@@ -1,5 +1,6 @@
 package com.future.controller;
 
+import com.future.entity.User;
 import com.future.error.CustomException;
 import com.future.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -45,8 +47,25 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public CompletableFuture<ResponseEntity> findAllUsers(){
+    public CompletableFuture<ResponseEntity<List<User>>> findAllUsers(){
         return userService.findAllUsers()
                 .thenApply(ResponseEntity::ok);
+    }
+
+    @GetMapping("/users/multiThread")
+    public ResponseEntity<List<User>> findAllUsersMultiThread(){
+
+        CompletableFuture<List<User>> thread = userService.findAllUsers();
+        CompletableFuture<List<User>> thread1 = userService.findAllUsers();
+        CompletableFuture<List<User>> thread2 = userService.findAllUsers();
+        CompletableFuture<List<User>> thread3 = userService.findAllUsers();
+        CompletableFuture<List<User>> thread4 = userService.findAllUsers();
+        CompletableFuture<List<User>> thread5 = userService.findAllUsers();
+        CompletableFuture<List<User>> thread6 = userService.findAllUsers();
+        CompletableFuture<List<User>> thread7 = userService.findAllUsers();
+
+        CompletableFuture.allOf(thread, thread1, thread2, thread3, thread4, thread5, thread6, thread7).join();
+        return ResponseEntity.status(HttpStatus.OK).build();
+
     }
 }
