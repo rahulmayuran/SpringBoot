@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -51,20 +48,14 @@ public class UserController {
                 .thenApply(ResponseEntity::ok);
     }
 
-    @GetMapping("/users/multiThread")
-    public ResponseEntity<List<User>> findAllUsersMultiThread(){
+    @GetMapping("/users/{id}")
+    public CompletableFuture<ResponseEntity<User>> findUserById(@PathVariable(value = "id") int id){
+        return userService.findUserById(id)
+                .thenApply(ResponseEntity::ok);
+    }
 
-        CompletableFuture<List<User>> thread = userService.findAllUsers();
-        CompletableFuture<List<User>> thread1 = userService.findAllUsers();
-        CompletableFuture<List<User>> thread2 = userService.findAllUsers();
-        CompletableFuture<List<User>> thread3 = userService.findAllUsers();
-        CompletableFuture<List<User>> thread4 = userService.findAllUsers();
-        CompletableFuture<List<User>> thread5 = userService.findAllUsers();
-        CompletableFuture<List<User>> thread6 = userService.findAllUsers();
-        CompletableFuture<List<User>> thread7 = userService.findAllUsers();
-
-        CompletableFuture.allOf(thread, thread1, thread2, thread3, thread4, thread5, thread6, thread7).join();
-        return ResponseEntity.status(HttpStatus.OK).build();
-
+    @GetMapping("/users/web-client")
+    public CompletableFuture<List<User>> callUsersWebClient(){
+        return userService.getUsersUsingWebClient();
     }
 }
