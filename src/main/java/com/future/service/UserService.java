@@ -16,6 +16,10 @@ import reactor.core.publisher.Mono;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,8 +39,8 @@ public class UserService {
     public CompletableFuture<List<User>> saveUser(MultipartFile file)
             throws CustomException {
 
-        long start = System.currentTimeMillis();
-        log.info("Logging the start time :{} for parse Operation.", start/1000/60/60);
+        LocalTime start = LocalTime.now();
+        log.info("Logging the start time :{} for parse Operation.", start);
 
         List<User> parsedUsers = parseCsv(file);
         log.info("Parsed the list of users with size:{} using Thread:{}",
@@ -44,8 +48,8 @@ public class UserService {
 
         userRepository.saveAll(parsedUsers);
 
-        long end = System.currentTimeMillis();
-        log.info("Logging the end time:{} after parsing. Total time taken:{} sec .", end/1000/60/60, (end - start)/1000);
+        LocalTime end = LocalTime.now();
+        log.info("Logging the end time:{} after parsing. Total time taken:{} sec .", end, Duration.between(start, end));
 
         return CompletableFuture.completedFuture(parsedUsers);
     }
