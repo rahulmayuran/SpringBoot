@@ -10,10 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RestController
@@ -52,6 +54,11 @@ public class UserController {
     public CompletableFuture<ResponseEntity<User>> findUserById(@PathVariable(value = "id") int id){
         return userService.findUserById(id)
                 .thenApply(ResponseEntity::ok);
+    }
+
+    @GetMapping("/users/join-multiple-threads")
+    public ResponseEntity clubMultipleThreads(){
+        return userService.clubMultipleThreads();
     }
 
     @GetMapping("/users/web-client")

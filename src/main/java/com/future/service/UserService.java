@@ -3,22 +3,21 @@ package com.future.service;
 import com.future.entity.User;
 import com.future.error.CustomException;
 import com.future.repository.UserRepository;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -111,6 +110,7 @@ public class UserService {
         }
     }
 
+    @Async
     public CompletableFuture<List<User>> getUsersUsingWebClient() {
 
         CompletableFuture<List<User>> resultingFuture = new CompletableFuture<>();
@@ -143,5 +143,27 @@ public class UserService {
                 resultingFuture::completeExceptionally);
 
         return resultingFuture;
+    }
+
+    @Async
+    public ResponseEntity clubMultipleThreads() {
+
+        CompletableFuture<User> thread0 = findUserById(1);
+        CompletableFuture<User> thread1 = findUserById(3);
+        CompletableFuture<User> thread2 = findUserById(5);
+        CompletableFuture<User> thread3 = findUserById(7);
+        CompletableFuture<User> thread4 = findUserById(9);
+        CompletableFuture<User> thread5 = findUserById(11);
+        CompletableFuture<User> thread6 = findUserById(13);
+        CompletableFuture<User> thread7 = findUserById(15);
+        CompletableFuture<User> thread8 = findUserById(17);
+
+        CompletableFuture.allOf(thread0, thread1,
+                thread2, thread3,
+                thread4, thread5,
+                thread6, thread7, thread8).toCompletableFuture().join();
+
+        return ResponseEntity.ok().build();
+
     }
 }
