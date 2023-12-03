@@ -10,12 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RestController
@@ -25,7 +23,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/users/create")
-    public ResponseEntity<String> saveUsers(@RequestParam(value = "files")MultipartFile[] files )
+    public ResponseEntity<String> saveUsers(@RequestParam(value = "files") MultipartFile[] files )
             throws CustomException {
 
         for(MultipartFile file : files){

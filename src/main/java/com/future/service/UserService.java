@@ -158,10 +158,8 @@ public class UserService {
         CompletableFuture<User> thread7 = findUserById(15);
         CompletableFuture<User> thread8 = findUserById(17);
 
-        CompletableFuture.allOf(thread0, thread1,
-                thread2, thread3,
-                thread4, thread5,
-                thread6, thread7, thread8).toCompletableFuture().join();
+        CompletableFuture.allOf(thread0, thread1, thread2, thread3,
+                thread4, thread5, thread6, thread7, thread8).toCompletableFuture().join();
 
         return ResponseEntity.ok().build();
 

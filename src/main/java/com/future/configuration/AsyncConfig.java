@@ -1,7 +1,6 @@
 package com.future.configuration;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -33,12 +32,15 @@ public class AsyncConfig {
         executor.setThreadNamePrefix("userThread-");
 
         executor.initialize();
-        log.info("TaskExecutor thread initialized :{}", executor);
+        log.info("TaskExecutor thread initialized with :{} {} {} {} {} {} {} {}", executor.getActiveCount(), executor.getThreadPoolExecutor(),
+                executor.getPoolSize(), executor.getCorePoolSize(), executor.getMaxPoolSize(), executor.getKeepAliveSeconds(),
+                executor.getThreadPriority(), executor.getThreadNamePrefix());
         return executor;
     }
 
     @Bean(name = "webClient")
     protected WebClient webClient(){
+        log.info("WebClient Thread initiated with {} {} {}", Thread.currentThread(), Thread.activeCount(), Thread.interrupted());
         return WebClient.builder().build();
     }
 }
