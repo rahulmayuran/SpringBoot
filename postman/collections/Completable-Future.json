@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "820169e5-3c82-4eb0-8163-79e88a3d9312",
+		"name": "Completable-Future",
+		"description": "# Completable Future\n\n> Testing with API's to store data from excel sheet to tables \n  \n> CRUD operations for the same.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "5108570-820169e5-3c82-4eb0-8163-79e88a3d9312"
+	},
+	"item": [
+		{
+			"name": "Upload CSV to H2 DB",
+			"id": "e85ecdf1-e38c-4942-a28c-145f8c37cb9a",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "files",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files",
+							"description": "Small :: Data containing random names, email and gender",
+							"type": "file",
+							"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+							"src": "/C:/Users/rhl25/Downloads/MOCK_DATA (1).csv"
+						},
+						{
+							"key": "files",
+							"description": "Large :: Randome names, emails and ages",
+							"type": "file",
+							"src": "/C:/Users/rhl25/Downloads/MOCK_DATA (2).csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9000/users/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"users",
+						"create"
+					],
+					"query": [
+						{
+							"key": "files",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET All Users",
+			"id": "b020cade-4f26-414b-a1c2-1d745673bdaf",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET User By an Id",
+			"id": "0d8fa62c-cc8a-4a95-a28f-e61e1aa95e47",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/users/13",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"users",
+						"13"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Users by WebClient",
+			"id": "c5317671-37ad-4c4d-ada9-73d39c71f232",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/users/web-client",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"users",
+						"web-client"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET All Users MultiThreading",
+			"id": "2950038d-708e-4480-8695-1e62e23e4eac",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/users/join-multiple-threads",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"users",
+						"join-multiple-threads"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
