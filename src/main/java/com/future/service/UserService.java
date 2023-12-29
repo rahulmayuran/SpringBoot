@@ -5,8 +5,6 @@ import com.future.error.CustomException;
 import com.future.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -158,10 +156,11 @@ public class UserService {
         CompletableFuture<User> thread7 = findUserById(15);
         CompletableFuture<User> thread8 = findUserById(17);
 
-        CompletableFuture.allOf(thread0, thread1, thread2, thread3,
-                thread4, thread5, thread6, thread7, thread8).toCompletableFuture().join();
+         CompletableFuture<Void> x = CompletableFuture.allOf(thread0, thread1, thread2, thread3,
+                thread4, thread5, thread6, thread7, thread8)
+                .toCompletableFuture();
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(x);
 
     }
 }
