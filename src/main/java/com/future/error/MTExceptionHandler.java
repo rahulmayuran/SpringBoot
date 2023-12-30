@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class MTExceptionHandler {
 
+    private final ObjectMapper mapper;
+
     @Autowired
-    ObjectMapper mapper;
+    public MTExceptionHandler(ObjectMapper mapper){
+        this.mapper = mapper;
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDto> handleGlobalException(Exception e){

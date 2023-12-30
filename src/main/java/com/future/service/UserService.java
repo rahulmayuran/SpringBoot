@@ -1,5 +1,6 @@
 package com.future.service;
 
+import com.future.dto.UserDto;
 import com.future.entity.User;
 import com.future.error.CustomException;
 import com.future.repository.UserRepository;
@@ -22,6 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -33,22 +37,25 @@ public class UserService {
     private final WebClient webClient;
 
     @Async
-    public CompletableFuture<List<User>> saveUser(MultipartFile file)
+    public CompletableFuture<List<UserDto>> saveUser(MultipartFile file)
             throws CustomException {
 
         LocalTime start = LocalTime.now();
         log.info("Logging the start time :{} for parse Operation.", start);
 
-        List<User> parsedUsers = parseCsv(file);
+        List<UserDto> parsedDtoUsers = parseCsv(file);
         log.info("Parsed the list of users with size:{} using Thread:{}",
-                parsedUsers.size(), Thread.currentThread().getName());
+                parsedDtoUsers.size(), Thread.currentThread().getName());
 
+        //Make DTO to persistable object, save it and convert back to DTO
+        List<User> parsedUsers = convertToUserList(parsedDtoUsers);
         userRepository.saveAll(parsedUsers);
+        parsedDtoUsers = convertToUserDtoList(parsedUsers);
 
         LocalTime end = LocalTime.now();
         log.info("Logging the end time:{} after parsing. Total time taken:{} sec .", end, Duration.between(start, end));
 
-        return CompletableFuture.completedFuture(parsedUsers);
+        return CompletableFuture.completedFuture(parsedDtoUsers);
     }
 
     @Async
@@ -73,13 +80,13 @@ public class UserService {
             return CompletableFuture.completedFuture(singleUser);
         }
         log.error("No user found for provided Id");
-        return null;
+        return CompletableFuture.completedFuture(null);
     }
 
-    private List<User> parseCsv(MultipartFile file)
+    private List<UserDto> parseCsv(MultipartFile file)
             throws CustomException {
 
-        List<User> users = new ArrayList<>();
+        List<UserDto> users = new ArrayList<>();
         try{
             BufferedReader br = new BufferedReader(
                             new InputStreamReader(file.getInputStream()));
@@ -88,12 +95,12 @@ public class UserService {
             while( null != (line = br.readLine())){
 
                 String[] data = line.split(",");
-                User user = new User();
-                user.setName(data[0]);
-                user.setEmail(data[1]);
-                user.setGender(data[2]);
+                UserDto userDto = new UserDto();
+                userDto.setName(data[0]);
+                userDto.setEmail(data[1]);
+                userDto.setGender(data[2]);
                 if(lineCounter >= 1){
-                    users.add(user);
+                    users.add(userDto);
                 }
                 lineCounter++;
 
@@ -142,25 +149,42 @@ public class UserService {
 
         return resultingFuture;
     }
+    private static List<User> convertToUserList(List<UserDto> userDtoList){
+        UserDto u = new UserDto();
+        log.info("Converted from {} to {}", userDtoList.getClass().getSimpleName(), u.getClass().getSimpleName());
+        return u.copyToUserList(userDtoList);
+    }
+    private static List<UserDto> convertToUserDtoList(List<User> userList){
+        User u = new User();
+        log.info("Converted from {} to {}", userList.getClass().getSimpleName(), u.getClass().getSimpleName());
+        return u.copyToUserDtoList(userList);
+    }
 
     @Async
-    public ResponseEntity clubMultipleThreads() {
+    public ResponseEntity<List<User>> clubMultipleThreads() {
 
-        CompletableFuture<User> thread0 = findUserById(1);
-        CompletableFuture<User> thread1 = findUserById(3);
-        CompletableFuture<User> thread2 = findUserById(5);
-        CompletableFuture<User> thread3 = findUserById(7);
-        CompletableFuture<User> thread4 = findUserById(9);
-        CompletableFuture<User> thread5 = findUserById(11);
-        CompletableFuture<User> thread6 = findUserById(13);
-        CompletableFuture<User> thread7 = findUserById(15);
-        CompletableFuture<User> thread8 = findUserById(17);
+        AtomicReference<List<User>> users = new AtomicReference<>(new ArrayList<>());
 
-         CompletableFuture<Void> x = CompletableFuture.allOf(thread0, thread1, thread2, thread3,
-                thread4, thread5, thread6, thread7, thread8)
-                .toCompletableFuture();
+        //Create a CompletableFuture<List<User>> to add all threads together and extract its results to a List
+        CompletableFuture<List<User>> userListCompletableFuture = CompletableFuture.allOf(
+                findUserById(1), findUserById(3), findUserById(5), findUserById(7), findUserById(9),
+                findUserById(11), findUserById(13), findUserById(15), findUserById(17)
+        ).thenApply(c ->
+                Stream.of(findUserById(1), findUserById(3), findUserById(5), findUserById(7), findUserById(9),
+                        findUserById(11), findUserById(13), findUserById(15), findUserById(17))
+                        .map(CompletableFuture::join)
+                        .collect(Collectors.toList())
+        );
 
-        return ResponseEntity.ok(x);
-
+        userListCompletableFuture.whenCompleteAsync((userList, throwable) -> {
+            if(throwable == null){
+                users.set(userList);
+                log.info("Completable Future returned users");
+            } else {
+                log.error("Exception Occurred while clubbing multiple threads");
+                throw new CustomException(throwable, "Unable to club multiple Threads");
+            }
+        });
+        return ResponseEntity.ok(users.get());
     }
 }

@@ -1,6 +1,6 @@
 package com.future.error;
 
-public class CustomException extends Exception {
+public class CustomException extends RuntimeException {
 
     public CustomException(){
 
