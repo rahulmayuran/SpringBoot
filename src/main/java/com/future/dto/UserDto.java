@@ -3,6 +3,7 @@ package com.future.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.future.entity.User;
 import com.future.utils.CopyUtility;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Data
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
 
